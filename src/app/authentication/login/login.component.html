@@ -1,0 +1,31 @@
+<div class="login-register" style="background-color:#f3f3f4;">
+    <div class="login-box card">
+        <div class="card-body">
+            <div class="text-center">
+                <img class="img-fluid" src="assets/images/logo.png">
+            </div>
+            <form class="form-horizontal" ngNativeValidate #f="ngForm" (ngSubmit)="login( f )">
+                <h3 class="box-title m-b-20">Iniciar sesi&oacute;n</h3>
+                <div class="form-group ">
+                    <div class="col-xs-12">
+                        <input class="form-control" type="email" name="correo" ngModel placeholder="Correo" required> </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <input class="form-control info-shadow" type="password" name="contrasena" ngModel placeholder="Contraseña" required> </div>
+                </div>
+                <div class="form-group text-center m-t-20">
+                    <div class="col-xs-12">
+                        <button class="btn btn-primary btn-lg btn-block text-uppercase waves-effect waves-light" (click)="login(f)" [disabled]="loading"><i class="fa"  [ngClass]="{'fa-refresh fa-spin':loading}"></i> Entrar</button>
+                    </div>
+                </div>
+                <div class="alert alert-danger mt-2" role="alert" *ngIf="errMsj">
+                    <small>{{errMsj}}</small>
+                </div>
+                <div class="col-xs-12 text-center">
+                    <small>Gobierno de Nuevo Laredo 2018-2021</small>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,53 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "~@ng-select/ng-select/themes/default.theme.css";
+@import '~perfect-scrollbar/css/perfect-scrollbar.css';
+.ps .ps__scrollbar-y-rail {
+    left: 3px;
+    right: auto;
+}
+
+.customa {
+    color: rgb(100, 100, 100) !important;
+}
+
+.customa:hover {
+    color: #398bf7 !important;
+    cursor: pointer;
+}
+
+.card>.sk-spinner {
+    display: none;
+}
+
+.card.sk-loading {
+    position: relative;
+}
+
+.card.sk-loading:after {
+    content: '';
+    background-color: rgba(255, 255, 255, 0.8);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.card.sk-loading>.sk-spinner {
+    display: block;
+    position: absolute;
+    top: 40%;
+    left: 0;
+    right: 0;
+    z-index: 2000;
+}
+
+.btn-group,
+.btn-group-vertical {
+    position: sticky !important;
+}
+
+.pagination {
+    position: sticky !important;
+}

@@ -1,0 +1,94 @@
+<div class="row">
+    <div class="col-12">
+        <div custom-loading [load]="load" class="card">
+            <div class="sk-folding-cube sk-spinner">
+                <div class="sk-cube1 sk-cube"></div>
+                <div class="sk-cube2 sk-cube"></div>
+                <div class="sk-cube4 sk-cube"></div>
+                <div class="sk-cube3 sk-cube"></div>
+            </div>
+            <div class="card-body">
+                <div class="d-flex flex-wrap m-b-30">
+                    <div>
+                        <h3 *ngIf="nuevo" class="card-title"><span class="lstick"></span>AGREGAR USUARIO</h3>
+                        <h3 *ngIf="!nuevo" class="card-title"><span class="lstick"></span>EDITAR USUARIO</h3>
+                    </div>
+                </div>
+                <form ngNativeValidate #f="ngForm" (ngSubmit)="agregar( f )">
+                    <div class="col-md-12">
+
+                        <div class="form-group">
+                            <label>Nombre de Usuario: </label>
+                            <input [(ngModel)]="forma.nombre" name="nombre" type="text" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Correo</label>
+                            <input (focusout)="buscarUsuarioRepetido()" type="email" class="form-control" placeholder="Ingrese su correo" [(ngModel)]="forma.correo" name="correo" required>
+                            <div *ngIf="correo_repetido" class="m-t-5 alert alert-danger" role="alert">
+                                Correo ya registrado.
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Contraseña</label>
+                            <input *ngIf="nuevo" type="password" class="form-control" [(ngModel)]="forma.password" name="password" [required]="forma.idusuario === '0'">
+                            <input *ngIf="!nuevo" type="password" class="form-control" placeholder="Ingrese para actualizar" [(ngModel)]="forma.password" name="password" [required]="forma.idusuario === '0'">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Tipo de Usuario</label>
+                            <select class="custom-select col-12" [(ngModel)]="forma.idrol" name="idrol" required>
+              <option *ngFor="let rol of roles" value="{{rol.idrol}}">{{rol.rol}}</option>
+            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Secretaria</label>
+                            <select class="custom-select col-12" [(ngModel)]="forma.idsecretaria" (ngModelChange)="cambioSecretaria()" name="idsecretaria" required>
+              <option *ngFor="let s of secretarias" value="{{s.idsecretaria}}">{{s.secretaria}}</option>
+            </select>
+                        </div>
+
+                        <div class="form-group" *ngIf="forma.idsecretaria != null">
+                            <label>Direccion</label>
+                            <select class="custom-select col-12" [(ngModel)]="forma.iddireccion" (ngModelChange)="cambioDireccion()" name="iddireccion" required>
+              <option *ngFor="let d of direcciones" value="{{d.iddireccion}}">{{d.direccion}}</option>
+            </select>
+                        </div>
+
+                        <div class="form-group" *ngIf="forma.iddireccion != null">
+                            <label>Subdireccion</label>
+                            <select class="custom-select col-12" [(ngModel)]="forma.idsubdireccion" name="idsubdireccion" (ngModelChange)="subdireccion()" required>
+              <option *ngFor="let s of subdirecciones" value="{{s.idsubdireccion}}">{{s.subdireccion}}</option>
+            </select>
+                        </div>
+
+                        <div class="form-group" *ngIf="usuario.idusuario != forma.idusuario">
+                            <label>Estado: </label>
+                            <span [ngSwitch]="forma.activo" class="font-bold">
+              <button type="button" class="btn btn-success text-center font-bold btn-sm" style="width:100px"
+                *ngSwitchCase="1" (click)="forma.activo = '0'">Activo</button>
+              <button type="button" class="btn btn-danger text-center font-bold btn-sm" style="width:100px"
+                *ngSwitchCase="0" (click)="forma.activo = '1'">Inactivo</button>
+            </span>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <div class="row">
+                        <div class="col text-left">
+                            <button type="button" [routerLink]="['/usuarios']" class="btn btn-danger">Cancelar</button>
+                        </div>
+                        <div class="col text-right">
+                            <button [disabled]="!f.valid" class="btn btn-primary" type="submit"><i class="fa fa-save"></i> Guardar</button>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger mt-2" role="alert" *ngIf="errMsj">
+                        <small>{{errMsj}}</small>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
