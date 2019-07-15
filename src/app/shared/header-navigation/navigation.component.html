@@ -1,0 +1,177 @@
+<header class="topbar">
+    <nav class="navbar top-navbar navbar-expand-md navbar-light">
+        <!-- ============================================================== -->
+        <!-- Logo -->
+        <!-- ============================================================== -->
+        <div class="navbar-header">
+            <a class="navbar-brand" href="index.html">
+                <!-- Logo icon --><b>
+                    <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
+                    <!-- Dark Logo icon -->
+                    <img src="assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
+                    <!-- Light Logo icon -->
+                    <img src="assets/images/logo-light-icon.png" alt="homepage" class="light-logo" />
+                </b>
+                <!--End Logo icon -->
+                <!-- Logo text --><span>
+                 <!-- dark Logo text -->
+                 <img src="assets/images/logo-text.png" alt="homepage" class="dark-logo" />
+                 <!-- Light Logo text -->    
+                 <img src="assets/images/logo-light-text.png" class="light-logo" alt="homepage" /></span> </a>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Logo -->
+        <!-- ============================================================== -->
+        <div class="navbar-collapse">
+            <!-- ============================================================== -->
+            <!-- toggle and nav items -->
+            <!-- ============================================================== -->
+            <ul class="navbar-nav mr-auto mt-md-0">
+                <li class="nav-item m-l-10"> <a class="nav-link sidebartoggler text-muted waves-effect waves-dark" href="javascript:void(0)"><i class="ti-menu"></i></a> </li>
+                
+            </ul>
+            <!-- ============================================================== -->
+            <!-- User profile and search -->
+            <!-- ============================================================== -->
+            <!-- <ul class="navbar-nav mr-auto my-lg-0">
+                <li class="nav-item m-l-10">
+                    <div (click)="openModalColonia(modalEvaluacion)">
+                        <i class="mdi mdi-plus-circle" style="color: #ca0088"></i>
+                        <label for="pais" class="font-weight-bold">Encuesta</label>
+                    </div>
+                </li>
+            </ul> -->
+            <ul class="navbar-nav my-lg-0">
+                <!-- ============================================================== -->
+                <!-- Search -->
+                <!-- ============================================================== -->
+                <li class="">
+                    <!-- {{name}}<button class="btn btn-secondary" (click)="salir()">Salir</button> -->
+                    Bienvenido {{name}} <a (click)="salir()" class="customa"><i class="fa fa-sign-out ml-2"></i> Salir </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<ng-template #modalEvaluacion let-modal let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Evaluacion del sistema</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form ngNativeValidate #f="ngForm">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>El sistena cumplió con lo solicitado por el departamento: </label>
+                    <div class="btn-group btn-group-toggle" ngbRadioGroup name="primera" [(ngModel)]="formaModal.primera">
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="0"> Muy de acuerdo
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="1"> De acuerdo
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="2"> Ni de acuerdo, ni desacuerdo
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="3"> En desacuerdo
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="4"> Muy en desacuerdo
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>El sistena resulto fácil de usar: </label>
+                    <div class="btn-group btn-group-toggle" ngbRadioGroup name="segunda" [(ngModel)]="formaModal.segunda">
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="0"> Muy de acuerdo
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="1"> De acuerdo
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="2"> Ni de acuerdo, ni desacuerdo
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="3"> En desacuerdo
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="4"> Muy en desacuerdo
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>El apoyo en dudas y problemas con el sistema fue satisfactorio: </label>
+                    <div class="btn-group btn-group-toggle" ngbRadioGroup name="tercera" [(ngModel)]="formaModal.tercera">
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="0"> Muy de acuerdo
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="1"> De acuerdo
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="2"> Ni de acuerdo, ni desacuerdo
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="3"> En desacuerdo
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="4"> Muy en desacuerdo
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>La atención de las personas encargadas sobre el sistea fue eficiente: </label>
+                    <div class="btn-group btn-group-toggle" ngbRadioGroup name="cuarta" [(ngModel)]="formaModal.cuarta">
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="0"> Muy de acuerdo
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="1"> De acuerdo
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="2"> Ni de acuerdo, ni desacuerdo
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="3"> En desacuerdo
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="4"> Muy en desacuerdo
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>En general el funcionamiento general del sistema lo determinaría como eficiente: </label>
+                    <div class="btn-group btn-group-toggle" ngbRadioGroup name="quinta" [(ngModel)]="formaModal.quinta">
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="0"> Muy de acuerdo
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="1"> De acuerdo
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="2"> Ni de acuerdo, ni desacuerdo
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="3"> En desacuerdo
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="4"> Muy en desacuerdo
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-danger mt-2" role="alert" *ngIf="errMsj">
+                <small>{{errMsj}}</small>
+            </div>
+            {{formaModal | json}}
+        </form>
+    </div>
+    <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-outline-dark" (click)="d('guardar')">Save</button> -->
+        <!-- <button class="btn btn-primary" (click)="d('save')"><i class="fa fa-check"></i> Guardar</button> -->
+    </div>
+</ng-template>
