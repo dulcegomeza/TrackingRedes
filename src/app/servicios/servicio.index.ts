@@ -1,3 +1,5 @@
+import { UsuariosService } from './usuarios.service';
+import { ServiciosService } from './servicios.service';
 
 // Guards
 export { LoginGuard } from './guards/login.guard';
@@ -10,6 +12,7 @@ export { DireccionesService } from './direcciones.service';
 export { EstadosService } from './estados.service';
 export { UsuariosService } from './usuarios.service';
 export { TicketsService } from './tickets.service';
+export { ServiciosService} from './servicios.service'; 
 
 
 

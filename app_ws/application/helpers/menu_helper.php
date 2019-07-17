@@ -19,6 +19,7 @@ function asignarMenu($idrol)
             ['path' => '/subdirecciones', 'title' => 'Subdirecciones', 'icon' => 'mdi mdi-home-modern', 'class' => '', 'label' => '', 'labelClass' => '', 'extralink' => false, 'submenu' => []],
             ['path' => '/estados', 'title' => 'Estados', 'icon' => 'mdi mdi-priority-low', 'class' => '', 'label' => '', 'labelClass' => '', 'extralink' => false, 'submenu' => []],
             ['path' => '/usuarios', 'title' => 'Usuarios', 'icon' => 'mdi mdi-account', 'class' => '', 'label' => '', 'labelClass' => '', 'extralink' => false, 'submenu' => []],
+            ['path' => '/servicios', 'title' => 'Servicios', 'icon' => 'mdi mdi-account', 'class' => '', 'label' => '', 'labelClass' => '', 'extralink' => false, 'submenu' => []],
         ]
     );
 

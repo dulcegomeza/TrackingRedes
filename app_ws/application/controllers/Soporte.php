@@ -1511,4 +1511,195 @@ class Soporte extends REST_Controller
         $this->response($respuesta, $status);
     }
 
+    public function serviciosp_post()
+    {
+        $headerToken = apache_request_headers()['Authorization'];
+
+        if ($this->validarJWT($headerToken)) {
+            $this->load->helper('paginacion');
+            $pagina = $this->post('pagina');
+            $por_pagina = $this->post('por_pagina');
+            $filtros = $this->post('filtros');
+            $filtros = (array) $filtros;
+            $campos = array('*');
+            $respuesta = paginar_todo('servicios', $pagina, $por_pagina, $campos, $filtros);
+            $status = 200;
+        } else {
+            $respuesta = array(
+                'mensaje' => 'Acceso no autorizado',
+            );
+            $status = 401;
+        }
+        $this->response($respuesta, $status);
+    }
+
+    public function servicio_cambiar_estado_post()
+    {
+        $headerToken = apache_request_headers()['Authorization'];
+
+        if ($this->validarJWT($headerToken)) {
+
+            $idservicio = $this->post('idservicio');
+            $val = $this->post('val');
+
+            $update = $this->db->where('idservicio', $idservicio)->update('servicios', array('activo' => $val));
+            if ($update) {
+                $respuesta = array(
+                    'mensaje' => 'Actualizacion de estado correcta',
+                );
+                $status = 200;
+            } else {
+                $respuesta = array(
+                    'mensaje' => 'Error en actualizacion de estado',
+                    'error' => $this->db->error(),
+                );
+                $status = 409;
+            }
+
+        } else {
+            $respuesta = array(
+                'mensaje' => 'Acceso no autorizado',
+            );
+            $status = 401;
+        }
+        $this->response($respuesta, $status);
+    }
+
+    public function servicio_agregar_post()
+    {
+        $headerToken = apache_request_headers()['Authorization'];
+        if ($this->validarJWT($headerToken)) {
+            $post = (array) json_decode($this->post('data'));
+
+            $this->db->trans_begin();
+            $data = array(
+                'servicio' => $post['servicio'],
+                'activo' => $post['activo'],
+                'idusuario' => $this->leerToken($headerToken)->data->idusuario,
+            );
+
+            $insert = $this->db->insert('servicios', $data);
+            $idservicio = $this->db->insert_id();
+            
+            if ($this->db->trans_status() === false) {
+
+                $this->db->trans_rollback();
+                $respuesta = array(
+                    'mensaje' => 'Error en actualizacion.',
+                );
+                $status = 409;
+            } else {
+                $this->db->trans_commit();
+                $respuesta = array(
+                    'mensaje' => 'Insercion correcta',
+                );
+                $status = 200;
+            }
+
+        } else {
+            $respuesta = array(
+                'mensaje' => 'Acceso no autorizado',
+            );
+            $status = 401;
+        }
+        $this->response($respuesta, $status);
+    }
+
+    public function servicio_get()
+    {
+        $headerToken = apache_request_headers()['Authorization'];
+
+        if ($this->validarJWT($headerToken)) {
+            $idservicio = $this->uri->segment(3);
+            $where = array('idservicio' => $idservicio);
+
+            $this->db->select('*');
+            $query = $this->db->get_where('servicios', $where, 1);
+
+            if ($query && $query->num_rows() >= 1) {
+
+                $registro = array(
+                    'idservicio' => $query->row('idservicio'),
+                    'servicio' => $query->row('servicio'),
+                    'activo' => $query->row('activo'),
+                    'idusuario' => $query->row('idusuario'),
+                );
+
+                $respuesta = array(
+                    'mensaje' => 'Registro cargado correctamente',
+                    'registro' => $registro,
+                );
+                $status = 200;
+            } else {
+                $respuesta = array(
+                    'mensaje' => 'Error interno',
+                    'query' => $this->db->last_query(),
+                );
+                $status = 500;
+            }
+        } else {
+            $respuesta = array(
+                'mensaje' => 'Acceso no autorizado',
+            );
+            $status = 401;
+        }
+        $this->response($respuesta, $status);
+    }
+
+    public function servicio_actualizar_post()
+    {
+        $headerToken = apache_request_headers()['Authorization'];
+
+        if ($this->validarJWT($headerToken)) {
+            $post = (array) json_decode($this->post('data'));
+
+            $idservicio = $post['idservicio'];
+
+            if (isset($idservicio)) {
+                $this->db->trans_begin();
+                $data = array(
+                    'servicio' => $post['servicio'],
+                    'activo' => $post['activo'],
+                );
+
+                $update = $this->db->set($data)->where('idservicio', $idservicio)->update('servicios');
+
+                if ($this->db->trans_status() === false) {
+                    $this->db->trans_rollback();
+                    $respuesta = array(
+                        'mensaje' => 'Error en actualizacion.',
+                    );
+                    $status = 409;
+                } else {
+                    $this->db->trans_commit();
+                    $respuesta = array(
+                        'mensaje' => 'Actualizacion correcta',
+                    );
+                    $status = 200;
+
+                }
+            } else {
+                // invalido
+                $respuesta = array(
+                    'mensaje' => 'Error interno',
+                );
+                $status = 500;
+            }
+
+        } else {
+            $respuesta = array(
+                'mensaje' => 'Acceso no autorizado',
+            );
+            $status = 401;
+        }
+        $this->response($respuesta, $status);
+    }
+
+    public function frmtFecha($fecha)
+    {
+        $fecha = (array) $fecha;
+        $fechaFormateada = $fecha["year"] . "/" . $fecha["month"] . "/" . $fecha["day"];
+        return $fechaFormateada;
+    }
+
 }
