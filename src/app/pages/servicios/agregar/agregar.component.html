@@ -27,7 +27,7 @@
               <button type="button" [routerLink]="['/servicios']" class="btn btn-danger">Cancelar</button>
             </div>
             <div class="col text-right">
-              <button  [disabled]="!f.valid || (nombre=='' && nuevo) || load" class="btn btn-primary" type="submit"><i class="fa fa-save"></i>
+              <button  [disabled]="!f.valid || (servicio=='' && nuevo) || load" class="btn btn-primary" type="submit"><i class="fa fa-save"></i>
                 Guardar</button>
             </div>
           </div>

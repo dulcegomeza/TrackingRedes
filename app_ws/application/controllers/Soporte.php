@@ -1569,12 +1569,15 @@ class Soporte extends REST_Controller
     {
         $headerToken = apache_request_headers()['Authorization'];
         if ($this->validarJWT($headerToken)) {
-            $post = (array) json_decode($this->post('data'));
+
+            $servicio = $this->post('servicio');
+            $idusuario = $this->post('idusuario');
+
 
             $this->db->trans_begin();
             $data = array(
-                'servicio' => $post['servicio'],
-                'activo' => $post['activo'],
+                'servicio' => $servicio,
+                'activo'   => 1,
                 'idusuario' => $this->leerToken($headerToken)->data->idusuario,
             );
 
@@ -1651,15 +1654,14 @@ class Soporte extends REST_Controller
         $headerToken = apache_request_headers()['Authorization'];
 
         if ($this->validarJWT($headerToken)) {
-            $post = (array) json_decode($this->post('data'));
-
-            $idservicio = $post['idservicio'];
+            
+            $idservicio = $this->post('idservicio');
+            $servicio = $this->post('servicio');
 
             if (isset($idservicio)) {
                 $this->db->trans_begin();
                 $data = array(
-                    'servicio' => $post['servicio'],
-                    'activo' => $post['activo'],
+                    'servicio' => $servicio,
                 );
 
                 $update = $this->db->set($data)->where('idservicio', $idservicio)->update('servicios');

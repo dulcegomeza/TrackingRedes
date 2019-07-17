@@ -43,7 +43,7 @@ export class AgregarComponent  {
         }
       );
     }
-/*
+
     agregar(f: NgForm) {
       this.load = true;
       if(this.nuevo){
@@ -74,5 +74,5 @@ export class AgregarComponent  {
         );
       }
     }
-*/
+
 }
