@@ -30,21 +30,21 @@ export class ServiciosService {
       return resp;
     });
   }
-  /*
+  
   agregarServicio(data:any){
     let url = URL_SERVICIOS + `/servicio_agregar`;
-    return this.http.post(url).map((resp: any)) => {
+    return this.http.post(url,data).map((resp: any) => {
       return resp;
-    }
+    });
 
   }
 
   actualizarServicio(data: any) {
     let url = URL_SERVICIOS + "/servicio_actualizar";
-    return this.http.post(url).map((resp: any)) => {
+    return this.http.post(url, data).map((resp: any) => {
       return resp;
     });
-  }
+  } 
   
 
   cambiarEstado(idservicio, val) {
@@ -54,7 +54,15 @@ export class ServiciosService {
       .map((resp: any) => {
         return resp;
       });
-  } */
+  } 
+
+
+  getServicios() {
+    let url = URL_SERVICIOS + `/servicios`;
+    return this.http.get(url).map((resp: any) => {
+      return resp;
+    });
+  }
 
 
 }

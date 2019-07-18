@@ -9,6 +9,7 @@ import { ServiciosRoutes } from './servicios.routing';
 import { SharedModule } from '../../shared/shared.module.ts';
 import { ListadoComponent } from './listado/listado.component';
 import { AgregarComponent } from './agregar/agregar.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { AgregarComponent } from './agregar/agregar.component';
     FormsModule,
     ReactiveFormsModule,
     NgbModule,
-    SharedModule
+    SharedModule,
+    NgSelectModule
   ],
   declarations: [
     ListadoComponent,
