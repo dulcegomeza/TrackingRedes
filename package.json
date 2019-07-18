@@ -23,7 +23,7 @@
         "@angular/router": "^5.0.0",
         "@asymmetrik/ngx-leaflet": "^4.0.0",
         "@ng-bootstrap/ng-bootstrap": "^1.0.0",
-        "@ng-select/ng-select": "^1.0.1-rc.0",
+        "@ng-select/ng-select": "^2.20.0",
         "@sweetalert2/ngx-sweetalert2": "^5.0.1",
         "@swimlane/ngx-datatable": "^11.1.2",
         "@types/leaflet": "^1.2.11",

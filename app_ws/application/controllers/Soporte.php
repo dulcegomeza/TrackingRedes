@@ -1358,6 +1358,9 @@ class Soporte extends REST_Controller
             $idusuarioasignado = $this->post('idusuario');
             $oficio = $this->post('oficio');
             $equipo = $this->post('equipo');
+            $idservicio = $this->post('idservicio');
+            $ip = $this->post('ip');
+            $mac = $this->post('mac');
             $idusuario = $this->leerToken($headerToken)->data->idusuario;
 
             $data_ticket = array(
@@ -1372,6 +1375,9 @@ class Soporte extends REST_Controller
                 'activo' => 1,
                 'oficio' => $oficio,
                 'equipo' => $equipo,
+                'idservicio' => $idservicio,
+                'ip' => $ip,
+                'mac' => $mac,
                 'idusuario' => $idusuarioasignado,
             );
 
@@ -1433,6 +1439,9 @@ class Soporte extends REST_Controller
                 $idusuario = $this->put('idusuario');
                 $oficio = $this->put('oficio');
                 $equipo = $this->put('equipo');
+                $idservicio = $this->put('idservicio');
+                $ip = $this->put('ip');
+                $mac = $this->put('mac');
 
                 $data_limpia = array(
                     'nombre' => $nombre,
@@ -1445,6 +1454,9 @@ class Soporte extends REST_Controller
                     'activo' => 1,
                     'oficio' => $oficio,
                     'equipo' => $equipo,
+                    'idservicio' => $idservicio,
+                    'ip' => $ip,
+                    'mac' => $mac
                 );
 
                 $update = $this->db->where('idticket', $idticket)->update('tickets', $data_limpia);
@@ -1688,6 +1700,35 @@ class Soporte extends REST_Controller
                 $status = 500;
             }
 
+        } else {
+            $respuesta = array(
+                'mensaje' => 'Acceso no autorizado',
+            );
+            $status = 401;
+        }
+        $this->response($respuesta, $status);
+    }
+
+    public function servicios_get()
+    {
+        $headerToken = apache_request_headers()['Authorization'];
+
+        if ($this->validarJWT($headerToken)) {
+            $query = $this->db->get_where('servicios', array( 'activo' => 1));
+
+            if ($query && $query->num_rows() >= 1) {
+                $respuesta = array(
+                    'mensaje' => 'Registro cargado correctamente',
+                    'registros' => $query->result(),
+                );
+                $status = 200;
+            } else {
+                $respuesta = array(
+                    'mensaje' => 'Error interno',
+                    'error' => $this->db->error(),
+                );
+                $status = 500;
+            }
         } else {
             $respuesta = array(
                 'mensaje' => 'Acceso no autorizado',

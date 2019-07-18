@@ -5,7 +5,8 @@ import {
   DireccionesService,
   SubdireccionesService,
   UsuariosService,
-  TicketsService
+  TicketsService,
+  ServiciosService
 } from "../../../servicios/servicio.index";
 
 @Component({
@@ -21,6 +22,7 @@ export class AgregarComponent implements OnInit {
   direcciones: any[];
   subdirecciones: any[];
   usuarios: any[];
+  servicios: any[];
   forma = {
     idticket: '0',
     nombre: "",
@@ -34,7 +36,10 @@ export class AgregarComponent implements OnInit {
     medio: "",
     oficio: "N/A",
     equipo: "",
-    idusuario: 0
+    idusuario: 0,
+    idservicio: "",
+    ip: "",
+    mac: ""
   };
 
   constructor(
@@ -43,12 +48,14 @@ export class AgregarComponent implements OnInit {
     private _usuariosService: UsuariosService,
     private _ticketsService: TicketsService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private _serviciosService: ServiciosService,
   ) {
     this.route.params.subscribe(parametros => {
       let idticket = parametros["idticket"];
       this.cargarDirecciones();
       this.cargarUsuarios();
+      this.cargarServicios();
       if (idticket > 0) {
         this.forma.idticket = idticket;
         this.nuevo = false;
@@ -163,6 +170,22 @@ export class AgregarComponent implements OnInit {
       .subscribe(
         data => {
           this.subdirecciones = data.registros;
+          this.load = false;
+        },
+        err => {
+          this.errMsj = err.error.mensaje;
+          this.load = false;
+        }
+      );
+  }
+
+
+  cargarServicios() {
+    this._serviciosService
+      .getServicios()
+      .subscribe(
+        data => {
+          this.servicios = data.registros;
           this.load = false;
         },
         err => {

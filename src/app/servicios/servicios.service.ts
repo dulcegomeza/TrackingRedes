@@ -57,4 +57,12 @@ export class ServiciosService {
   } 
 
 
+  getServicios() {
+    let url = URL_SERVICIOS + `/servicios`;
+    return this.http.get(url).map((resp: any) => {
+      return resp;
+    });
+  }
+
+
 }
