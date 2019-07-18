@@ -11,7 +11,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
 import { Router } from '@angular/router';
-import { JwtHelper } from 'angular2-jwt';
+import { JwtHelperService } from "@auth0/angular-jwt";
 import { Roles } from '../modelos/roles.model';
 declare var swal: any;
 
@@ -21,7 +21,7 @@ export class UsuariosService {
   token: string;
 
   rutas = [];
-  jwtHelper: JwtHelper = new JwtHelper();
+  jwtHelperService: JwtHelperService = new JwtHelperService();
 
   constructor(public http: HttpClient, public router: Router) {
     this.cargarStorage();
@@ -39,7 +39,7 @@ export class UsuariosService {
   cargarStorage() {
     if (localStorage.getItem(TOKEN)) {
       this.token = localStorage.getItem(TOKEN);
-      let tkn = this.jwtHelper.decodeToken(this.token);
+      let tkn = this.jwtHelperService.decodeToken(this.token);
       this.rutas = tkn.menu;
     } else {
       this.token = "";

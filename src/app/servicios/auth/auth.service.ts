@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { JwtHelper } from 'angular2-jwt';
+import { JwtHelperService } from "@auth0/angular-jwt";
 import { TOKEN } from '../../config/config';
 
 
 @Injectable()
 export class AuthService {
-    jwtHelper: JwtHelper = new JwtHelper();
+    jwtHelperService: JwtHelperService = new JwtHelperService();
     constructor() { }
 
     public isAuthenticated(): boolean {
         if (localStorage.getItem(TOKEN)) {
         const token = localStorage.getItem(TOKEN);
-        return !this.jwtHelper.isTokenExpired(token);
+        return !this.jwtHelperService.isTokenExpired(token);
         }else {
             return false;
         }
@@ -28,7 +28,7 @@ export class AuthService {
 
     public getPlayLoad() {
         let token = localStorage.getItem(TOKEN);
-        let decodeToken = this.jwtHelper.decodeToken(token);
+        let decodeToken = this.jwtHelperService.decodeToken(token);
         return decodeToken;
     }
 

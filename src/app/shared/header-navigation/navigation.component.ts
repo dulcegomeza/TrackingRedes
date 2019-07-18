@@ -3,7 +3,7 @@ import { NgbModal, ModalDismissReasons, NgbPanelChangeEvent, NgbCarouselConfig }
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 
 import { Router } from '@angular/router';
-import { JwtHelper } from 'angular2-jwt';
+import { JwtHelperService } from "@auth0/angular-jwt";
 import { Token } from '../../modelos/token.model';
 import { AuthService, UsuariosService } from '../../servicios/servicio.index';
 
@@ -16,7 +16,7 @@ export class NavigationComponent implements AfterViewInit {
   name: any = '';
   playLoad:any;
   public config: PerfectScrollbarConfigInterface = {};
-  jwtHelper: JwtHelper = new JwtHelper();
+  jwtHelperService: JwtHelperService = new JwtHelperService();
   constructor(private modalService: NgbModal, private _usuariosService: UsuariosService, private router: Router, _authService: AuthService) {
     this.playLoad = _authService.getPlayLoad()
     this.name = this.playLoad.data.nombre;
