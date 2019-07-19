@@ -1,103 +1,86 @@
 <div class="row">
-    <div class="col-12">
-        <div custom-loading [load]="load" class="card">
-            <div class="sk-folding-cube sk-spinner">
-                <div class="sk-cube1 sk-cube"></div>
-                <div class="sk-cube2 sk-cube"></div>
-                <div class="sk-cube4 sk-cube"></div>
-                <div class="sk-cube3 sk-cube"></div>
+  <div class="col-12">
+    <div custom-loading [load]="load" class="card">
+      <div class="sk-folding-cube sk-spinner">
+        <div class="sk-cube1 sk-cube"></div>
+        <div class="sk-cube2 sk-cube"></div>
+        <div class="sk-cube4 sk-cube"></div>
+        <div class="sk-cube3 sk-cube"></div>
+      </div>
+      <div class="card-body">
+        <div class="d-flex flex-wrap m-b-30">
+          <div>
+            <h3 *ngIf="nuevo" class="card-title">
+              <span class="lstick"></span>AGREGAR SUBDIRECCION
+            </h3>
+            <h3 *ngIf="!nuevo" class="card-title">
+              <span class="lstick"></span>EDITAR SUBDIRECCION
+            </h3>
+          </div>
+        </div>
+        <form ngNativeValidate #f="ngForm" (ngSubmit)="agregar(f)">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label>Nombre de la subdireccion: </label>
+              <input [(ngModel)]="forma.subdireccion" name="subdireccion" type="text" class="form-control" required />
             </div>
-            <div class="card-body">
-                <div class="d-flex flex-wrap m-b-30">
-                    <div>
-                        <h3 *ngIf="nuevo" class="card-title">
-                            <span class="lstick"></span>AGREGAR SUBDIRECCION
-                        </h3>
-                        <h3 *ngIf="!nuevo" class="card-title">
-                            <span class="lstick"></span>EDITAR SUBDIRECCION
-                        </h3>
-                    </div>
-                </div>
-                <form ngNativeValidate #f="ngForm" (ngSubmit)="agregar(f)">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Nombre de la subdireccion: </label>
-                            <input [(ngModel)]="forma.subdireccion" name="subdireccion" type="text" class="form-control" required />
-                        </div>
 
-                        <div class="form-group">
-                            <label>Secretaria</label>
-                            <select class="custom-select col-12" [(ngModel)]="forma.idsecretaria" (ngModelChange)="cambioSecretaria()" name="idsecretaria" required>
-                <option
-                  *ngFor="let s of secretarias"
-                  value="{{ s.idsecretaria }}"
-                  >{{ s.secretaria }}</option
-                >
+            <div class="form-group">
+              <label>Secretaria</label>
+              <select class="custom-select col-12" [(ngModel)]="forma.idsecretaria" (ngModelChange)="cambioSecretaria()"
+                name="idsecretaria" required>
+                <option *ngFor="let s of secretarias" value="{{ s.idsecretaria }}">{{ s.secretaria }}</option>
               </select>
-                        </div>
+            </div>
 
-                        <div class="form-group" *ngIf="forma.idsecretaria != null">
-                            <label>Direccion</label>
-                            <select class="custom-select col-12" [(ngModel)]="forma.iddireccion" name="iddireccion" required>
-                <option
-                  *ngFor="let d of direcciones"
-                  value="{{ d.iddireccion }}"
-                  >{{ d.direccion }}</option
-                >
+            <div class="form-group" *ngIf="forma.idsecretaria != null">
+              <label>Direccion</label>
+              <select class="custom-select col-12" [(ngModel)]="forma.iddireccion" name="iddireccion" required>
+                <option *ngFor="let d of direcciones" value="{{ d.iddireccion }}">{{ d.direccion }}</option>
               </select>
-                        </div>
+            </div>
 
-                        <div class="form-group">
-                            <label>Area</label>
-                            <select class="custom-select col-12" [(ngModel)]="forma.area" name="area" required>
-                <option value="0">Interior</option>
-                <option value="1">Exterior</option>
+            <div class="form-group">
+              <label>Area</label>
+              <select class="custom-select col-12" [(ngModel)]="forma.area" name="area" required>
+                <option value="0">Exterior</option>
+                <option value="1">Interior</option>
               </select>
-                        </div>
+            </div>
 
-                        <div class="form-group">
-                            <label>Estado: </label>
-                            <span [ngSwitch]="forma.activo" class="font-bold">
-                <button
-                  type="button"
-                  class="btn btn-success text-center font-bold btn-sm"
-                  style="width:100px"
-                  *ngSwitchCase="1"
-                  (click)="forma.activo = '0'"
-                >
+            <div class="form-group">
+              <label>Estado: </label>
+              <span [ngSwitch]="forma.activo" class="font-bold">
+                <button type="button" class="btn btn-success text-center font-bold btn-sm" style="width:100px"
+                  *ngSwitchCase="1" (click)="forma.activo = '0'">
                   Activo
                 </button>
-                <button
-                  type="button"
-                  class="btn btn-danger text-center font-bold btn-sm"
-                  style="width:100px"
-                  *ngSwitchCase="0"
-                  (click)="forma.activo = '1'"
-                >
+                <button type="button" class="btn btn-danger text-center font-bold btn-sm" style="width:100px"
+                  *ngSwitchCase="0" (click)="forma.activo = '1'">
                   Inactivo
                 </button>
               </span>
-                        </div>
+            </div>
 
-                        <hr />
-                        <div class="row">
-                            <div class="col text-left">
-                                <button type="button" [routerLink]="['/subdirecciones']" class="btn btn-danger">
+            <hr />
+            <div class="row">
+              <div class="col text-left">
+                <button type="button" [routerLink]="['/subdirecciones']" class="btn btn-danger">
                   Cancelar
                 </button>
-                            </div>
-                            <div class="col text-right">
-                                <button [disabled]="!f.valid" class="btn btn-primary" type="submit">
+              </div>
+              <div class="col text-right">
+                <button [disabled]="!f.valid" class="btn btn-primary" type="submit">
                   <i class="fa fa-save"></i> Guardar
                 </button>
-                            </div>
-                        </div>
-                        <div class="alert alert-danger mt-2" role="alert" *ngIf="errMsj">
-                            <small>{{ errMsj }}</small>
-                        </div>
-                    </div>
-                </form>
+              </div>
             </div>
-        </div>
+            <div class="alert alert-danger mt-2" role="alert" *ngIf="errMsj">
+              <small>{{ errMsj }}</small>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
+  </div>
 </div>

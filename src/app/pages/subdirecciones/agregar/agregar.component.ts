@@ -1,26 +1,27 @@
-import { Component, ViewChild } from "@angular/core";
-import { NgForm } from "@angular/forms";
-import { Router, ActivatedRoute } from "@angular/router";
+import { Component, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 import {
   SecretariasService,
   DireccionesService,
   SubdireccionesService,
-} from "../../../servicios/servicio.index";
+} from '../../../servicios/servicio.index';
 
 @Component({
-  selector: "app-agregar",
-  templateUrl: "./agregar.component.html"
+  selector: 'app-agregar',
+  templateUrl: './agregar.component.html'
 })
 export class AgregarComponent {
-  @ViewChild("f") userFrm: NgForm;
+  @ViewChild('f') userFrm: NgForm;
   nuevo = true;
   errMsj = null;
   load = true;
   loadReq = true;
   forma = {
-    idsubdireccion: "0",
-    subdireccion: "",
-    activo: "0",
+    idsubdireccion: '0',
+    subdireccion: '',
+    activo: '0',
+    area: '1',
     idsecretaria: null,
     iddireccion: null
   };
@@ -35,7 +36,7 @@ export class AgregarComponent {
     private route: ActivatedRoute
   ) {
     this.route.params.subscribe(parametros => {
-      let idsubdireccion = parametros["idsubdireccion"];
+      let idsubdireccion = parametros['idsubdireccion'];
       this.cargarSecretarias();
 
       if (idsubdireccion > 0) {
@@ -53,7 +54,7 @@ export class AgregarComponent {
     if (this.nuevo) {
       this._subdireccionesService.agregarSubdireccion(this.forma).subscribe(
         data => {
-          this.router.navigate(["/subdirecciones"]);
+          this.router.navigate(['/subdirecciones']);
           this.load = false;
         },
         err => {
@@ -65,7 +66,7 @@ export class AgregarComponent {
     } else {
       this._subdireccionesService.actualizarSubdireccion(this.forma).subscribe(
         data => {
-          this.router.navigate(["/subdirecciones"]);
+          this.router.navigate(['/subdirecciones']);
           this.load = false;
         },
         err => {

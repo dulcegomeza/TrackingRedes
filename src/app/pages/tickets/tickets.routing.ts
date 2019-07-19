@@ -1,24 +1,24 @@
-import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
 import { ListadoComponent } from './listado/listado.component';
 import { AgregarComponent } from './agregar/agregar.component';
 import { VerComponent } from './ver/ver.component';
 
 const routes: Routes = [
   {
-    path: "",
+    path: '',
     component: ListadoComponent
   },
   {
-    path: "agregar",
+    path: 'agregar',
     component: AgregarComponent
   },
   {
-    path: "editar/:idticket",
+    path: 'editar/:idticket',
     component: AgregarComponent
   },
   {
-    path: "ver/:idticket",
+    path: 'ver/:idticket',
     component: VerComponent
   }
 ];

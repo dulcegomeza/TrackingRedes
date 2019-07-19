@@ -1,13 +1,13 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { NgForm } from "@angular/forms";
-import { Router, ActivatedRoute } from "@angular/router";
-import { UsuariosService, TicketsService, EstadosService } from "../../../servicios/servicio.index";
-import { forkJoin } from "rxjs/observable/forkJoin";
-import swal from "sweetalert2";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
+import { UsuariosService, TicketsService, EstadosService } from '../../../servicios/servicio.index';
+import { forkJoin } from 'rxjs/observable/forkJoin';
+import swal from 'sweetalert2';
 @Component({
-  selector: "app-listado",
-  templateUrl: "./listado.component.html",
-  styleUrls: ["./listado.component.css"]
+  selector: 'app-listado',
+  templateUrl: './listado.component.html',
+  styleUrls: ['./listado.component.css']
 })
 export class ListadoComponent implements OnInit {
   tickets: any[];
@@ -36,21 +36,20 @@ export class ListadoComponent implements OnInit {
     private route: ActivatedRoute
   ) {
     this.filtros = {
-      'idticket':'',
-      'fecha': '',
+      'idticket': '',
+      'fecha_creacion': '',
       'capturo': '',
-      'solicitante': '',
+      'nombre': '',
       'secretaria': '',
       'subdireccion': '',
-      'idestado':'',
-      'idrolasignado':'',
-      'idusuarioasignado':''
+      'idestado': '',
+      'idusuario_asignado': ''
     };
     this.cargar();
     this.loadPage(1);
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   loadPage(page: number) {
     if (page !== this.previousPage) {
@@ -72,7 +71,6 @@ export class ListadoComponent implements OnInit {
   }
 
   loadData() {
-    console.log(this.filtros);
     this.load = false;
     this._ticketsService
       .getTicketsPaginado(this.pageG, this.rpp, this.filtros)
@@ -80,7 +78,6 @@ export class ListadoComponent implements OnInit {
         data => {
           this.totalItems = data.total_paginas * 10;
           this.tickets = data.registros;
-          console.log(this.tickets);
           this.totalCount = data.cuantos;
           this.load = false;
         },
@@ -90,7 +87,7 @@ export class ListadoComponent implements OnInit {
       );
   }
 
-  
+
 
   cargar() {
     this.load = true;
@@ -109,18 +106,17 @@ export class ListadoComponent implements OnInit {
       },
       err => {
         swal({
-          type: "error",
-          title: "Contacte al administrador",
-          text: "No se pudo cargar la informacion."
+          type: 'error',
+          title: 'Contacte al administrador',
+          text: 'No se pudo cargar la informacion.'
         });
         this.load = false;
       }
     );
-    
+
   }
 
   cargarUsuarios() {
-    console.log(this.filtros.idrol);
     this._usuariosService.getUsuariosFiltros(this.filtros.idrol).subscribe(
       data => {
         this.usuarios = data.registros;

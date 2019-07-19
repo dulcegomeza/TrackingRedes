@@ -20,67 +20,65 @@
                             <label>Solicitante: </label>
                             <input [(ngModel)]="forma.nombre" name="nombre" type="text" class="form-control" required>
                         </div>
-
                         <div class="form-group col-md-4">
                             <label>Area</label>
-                            <select class="custom-select col-12" [disabled]="true" [(ngModel)]="forma.area" name="area" required>
-                               <option  value="0">Interior</option>
-                               <option  value="1">Exterior</option>
-                               <option  value="2">No Definido</option>
+                            <select class="custom-select col-12" [disabled]="true" [(ngModel)]="forma.area" name="area"
+                                required>
+                                <option value="0">Exterior</option>
+                                <option value="1">Interior</option>
+                                <option value="2">No Definido</option>
                             </select>
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label>Correo: </label>
-                            <input [(ngModel)]="forma.correo" name="correo" type="text" class="form-control" required>
+                            <input [(ngModel)]="forma.correo" name="correo" type="text" class="form-control"
+                                [required]="!forma.telefono && !forma.extension">
                         </div>
-
                         <div class="form-group col-md-3">
                             <label>Tel&eacute;fono</label>
-                            <input [(ngModel)]="forma.telefono" name="telefono" type="text" class="form-control" required>
+                            <input [(ngModel)]="forma.telefono" name="telefono" type="text" class="form-control"
+                                [required]="!forma.correo && !forma.extension">
                         </div>
-
                         <div class="form-group col-md-3">
                             <label>Extensi&oacute;n</label>
-                            <input [(ngModel)]="forma.extension" name="extension" type="text" class="form-control" required>
+                            <input [(ngModel)]="forma.extension" name="extension" type="text" class="form-control"
+                                [required]="!forma.telefono && !forma.correo">
                         </div>
                     </div>
-
                     <div class="row">
-
                         <div class="form-group col-md-6">
                             <label>Direcci&oacute;n</label>
-                            <select class="custom-select col-12" [(ngModel)]="forma.iddireccion" (ngModelChange)="cambioDireccion()" name="iddireccion" required>
-                                <option *ngFor="let d of direcciones" value="{{d.iddireccion}}">{{d.direccion}}</option>
-                            </select>
+                            <ng-select required [items]="direcciones" bindLabel="direccion" bindValue="iddireccion"
+                                name="iddireccion" [(ngModel)]="forma.iddireccion" (ngModelChange)="cambioDireccion(true)"
+                                [clearable]="false">
+                            </ng-select>
                         </div>
-
                         <div class="form-group col-md-6">
                             <label>Subdirecci&oacute;n</label>
-                            <select class="custom-select col-12" [(ngModel)]="forma.idsubdireccion" name="idsubdireccion" [disabled]="forma.iddireccion == 0" (ngModelChange)="cambioSubdireccion()" required>
-                                <option  *ngFor="let s of subdirecciones" [ngValue]="s.idsubdireccion">{{s.subdireccion}}</option>
+                            <select class="custom-select col-12" [(ngModel)]="forma.idsubdireccion"
+                                name="idsubdireccion" [disabled]="forma.iddireccion == 0"
+                                (ngModelChange)="cambioSubdireccion()" required>
+                                <option *ngFor="let s of subdirecciones" [ngValue]="s.idsubdireccion">{{s.subdireccion}}
+                                </option>
                             </select>
                         </div>
-
                     </div>
-
                     <div class="row">
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-12">
                             <label>Servicio:</label>
-                            <ng-select required [items]="servicios" bindLabel="servicio" bindValue="idservicio" name="idservicio" [(ngModel)]="forma.idservicio" [clearable]="false">
+                            <ng-select required [items]="servicios" bindLabel="servicio" bindValue="idservicio"
+                                name="idservicio" [(ngModel)]="forma.idservicio" [clearable]="false">
                             </ng-select>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label>Descripci&oacute;n:</label>
-                        <textarea [(ngModel)]="forma.descripcion" name="descripcion" type="text" class="form-control" rows="6" required></textarea>
+                        <textarea [(ngModel)]="forma.descripcion" name="descripcion" type="text" class="form-control"
+                            rows="6" required></textarea>
                     </div>
-
                     <div class="row">
-                    
                         <div class="form-group col-md-4">
                             <label>Folio del equipo: </label>
                             <input [(ngModel)]="forma.equipo" name="equipo" type="text" class="form-control" required>
@@ -93,49 +91,38 @@
                             <label>MAC del equipo: </label>
                             <input [(ngModel)]="forma.mac" name="mac" type="text" class="form-control" required>
                         </div>
-                    
-                    
                     </div>
-
                     <div class="row">
-
                         <div class="form-group col-md-6">
                             <label>Medio: </label>
-                            <select class="custom-select col-12" [(ngModel)]="forma.medio" name="medio" (ngModelChange)="oficio()" required>
-                                   <option value="Oficio">Oficio</option>
-                                   <option value="Telefono">Telefono</option>
-                                   <option value="Correo">Correo</option>
-                                   <option value="Personal">Personal</option>
+                            <select class="custom-select col-12" [(ngModel)]="forma.medio" name="medio"
+                                (ngModelChange)="oficio()" required>
+                                <option value="Oficio">Oficio</option>
+                                <option value="Telefono">Telefono</option>
+                                <option value="Correo">Correo</option>
+                                <option value="Personal">Personal</option>
                             </select>
                         </div>
-
                         <div class="form-group col-md-3">
                             <label>No. Oficio: </label>
-                            <input [(ngModel)]="forma.oficio" name="oficio" type="text" class="form-control" [disabled]="forma.medio !='Oficio'" required>
+                            <input [(ngModel)]="forma.oficio" name="oficio" type="text" class="form-control"
+                                [disabled]="forma.medio !='Oficio'" required>
                         </div>
-
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-6" *ngIf="nuevo">
                             <label>Asignar a: </label>
-                            <select class="custom-select col-12" [(ngModel)]="forma.idusuario" name="idusuario" required>
-                    <option *ngFor="let u of usuarios" value="{{u.idusuario}}">{{u.nombre}}</option>
-                  </select>
+                            <ng-select required [items]="usuarios" bindLabel="nombre" bindValue="idusuario"
+                                name="idusuario_asignado" [(ngModel)]="forma.idusuario_asignado" [clearable]="false">
+                            </ng-select>
                         </div>
-
-
-
                     </div>
-
-
-
-
-
                     <hr>
                     <div class="row">
                         <div class="col text-left">
                             <button type="button" [routerLink]="['/tickets']" class="btn btn-danger">Cancelar</button>
                         </div>
                         <div class="col text-right">
-                            <button [disabled]="!f.valid" class="btn btn-primary" type="submit"><i class="fa fa-save"></i> Agregar </button>
+                            <button [disabled]="!f.valid" class="btn btn-primary" type="submit"><i
+                                    class="fa fa-save"></i> Agregar </button>
                         </div>
                     </div>
                     <div class="alert alert-danger mt-2" role="alert" *ngIf="errMsj">
