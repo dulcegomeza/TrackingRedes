@@ -1348,37 +1348,39 @@ class Soporte extends REST_Controller
 
         if ($this->validarJWT($headerToken)) {
 
+            $idusuario = $this->leerToken($headerToken)->data->idusuario;
+            $idusuario_asignado = $this->post('idusuario_asignado');
+            $idsubdireccion = $this->post('idsubdireccion');
+            $idservicio = $this->post('idservicio');
+            $area = $this->post('area');
             $nombre = $this->post('nombre');
             $telefono = $this->post('telefono');
             $extension = $this->post('extension');
             $correo = $this->post('correo');
-            $idsubdireccion = $this->post('idsubdireccion');
             $descripcion = $this->post('descripcion');
             $medio = $this->post('medio');
-            $idusuarioasignado = $this->post('idusuario');
             $oficio = $this->post('oficio');
             $equipo = $this->post('equipo');
-            $idservicio = $this->post('idservicio');
             $ip = $this->post('ip');
             $mac = $this->post('mac');
-            $idusuario = $this->leerToken($headerToken)->data->idusuario;
 
             $data_ticket = array(
+                'idservicio' => $idservicio,
+                'idsubdireccion' => $idsubdireccion,
+                'idestado' => 1,
+                'idusuario' => $idusuario,
+                'idusuario_asignado' => $idusuario_asignado,
+                'area' => $area,
                 'nombre' => $nombre,
                 'telefono' => $telefono,
                 'extension' => $extension,
                 'correo' => $correo,
-                'idsubdireccion' => $idsubdireccion,
                 'descripcion' => $descripcion,
                 'medio' => $medio,
-                'idestado' => 1,
-                'activo' => 1,
                 'oficio' => $oficio,
                 'equipo' => $equipo,
-                'idservicio' => $idservicio,
                 'ip' => $ip,
                 'mac' => $mac,
-                'idusuario' => $idusuarioasignado,
             );
 
             $this->db->trans_begin();
@@ -1387,13 +1389,24 @@ class Soporte extends REST_Controller
 
             $data_asignacion = array(
                 'idticket' => $idticket,
-                'idusuario_asignado' => $idusuarioasignado,
-                'tiempo' => 'N/A',
+                'idusuario' => $idusuario,
+                'idusuario_asignado' => $idusuario_asignado,
+                'tiempo' => 0,
                 'comentario' => '',
-                'idusuario_asigno' => $idusuario,
             );
 
             $this->db->insert('tickets_asignaciones', $data_asignacion);
+
+            $data_estado = array(
+                'idticket' => $idticket,
+                'idusuario' => $idusuario,
+                'idusuario_asignado' => $idusuario_asignado,
+                'idestado' => 1,
+                'comentario' => '',
+                'tiempo' => 0,
+            );
+
+            $this->db->insert('tickets_estados', $data_estado);
 
             if ($this->db->trans_status() === false) {
                 $this->db->trans_rollback();
@@ -1429,32 +1442,32 @@ class Soporte extends REST_Controller
 
             if (isset($idticket)) {
 
-                $nombre = $this->put('nombre');
+                $idservicio = $this->put('idservicio');
+                $idsubdireccion = $this->put('idsubdireccion');
+                $area = $this->put('area');
+                $nombre = $this->put('nombre');                
                 $telefono = $this->put('telefono');
                 $extension = $this->put('extension');
                 $correo = $this->put('correo');
-                $idsubdireccion = $this->put('idsubdireccion');
                 $descripcion = $this->put('descripcion');
                 $medio = $this->put('medio');
-                $idusuario = $this->put('idusuario');
                 $oficio = $this->put('oficio');
                 $equipo = $this->put('equipo');
-                $idservicio = $this->put('idservicio');
                 $ip = $this->put('ip');
                 $mac = $this->put('mac');
 
                 $data_limpia = array(
+                    'idservicio' => $idservicio,
+                    'idsubdireccion' => $idsubdireccion,
+                    'area' => $area,
                     'nombre' => $nombre,
                     'telefono' => $telefono,
                     'extension' => $extension,
                     'correo' => $correo,
-                    'idsubdireccion' => $idsubdireccion,
                     'descripcion' => $descripcion,
                     'medio' => $medio,
-                    'activo' => 1,
                     'oficio' => $oficio,
                     'equipo' => $equipo,
-                    'idservicio' => $idservicio,
                     'ip' => $ip,
                     'mac' => $mac
                 );
@@ -1502,9 +1515,51 @@ class Soporte extends REST_Controller
             $query = $this->db->get_where('tickets', $where, 1);
 
             if ($query && $query->num_rows() >= 1) {
+                $datos = $query->row();
+                $idsubdireccion = $query->row('idsubdireccion');
+                $qiddir = $this->db->select('iddireccion')->from('subdirecciones')->where('idsubdireccion', $idsubdireccion)->get();
+                $iddireccion = $qiddir->row('iddireccion');
+                $datos->iddireccion = $iddireccion;
                 $respuesta = array(
                     'mensaje' => 'Registro cargado correctamente',
-                    'registro' => $query->row(),
+                    'registro' => $datos,
+                );
+                $status = 200;
+            } else {
+                $respuesta = array(
+                    'mensaje' => 'Error interno',
+                    'query' => $this->db->last_query(),
+                );
+                $status = 500;
+            }
+        } else {
+            $respuesta = array(
+                'mensaje' => 'Acceso no autorizado',
+            );
+            $status = 401;
+        }
+        $this->response($respuesta, $status);
+    }
+
+    public function ticket_detalle_get()
+    {
+        $headerToken = apache_request_headers()['Authorization'];
+
+        if ($this->validarJWT($headerToken)) {
+            $idticket = $this->uri->segment(3);
+            $where = array('idticket' => $idticket);
+            $this->db->select('*');
+            $query = $this->db->get_where('tickets', $where, 1);
+
+            if ($query && $query->num_rows() >= 1) {
+                $datos = $query->row();
+                $idsubdireccion = $query->row('idsubdireccion');
+                $qiddir = $this->db->select('iddireccion')->from('subdirecciones')->where('idsubdireccion', $idsubdireccion)->get();
+                $iddireccion = $qiddir->row('iddireccion');
+                $datos->iddireccion = $iddireccion;
+                $respuesta = array(
+                    'mensaje' => 'Registro cargado correctamente',
+                    'registro' => $datos,
                 );
                 $status = 200;
             } else {

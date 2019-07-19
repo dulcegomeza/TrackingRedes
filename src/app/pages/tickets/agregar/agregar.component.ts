@@ -1,20 +1,20 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { NgForm } from "@angular/forms";
-import { Router, ActivatedRoute } from "@angular/router";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 import {
   DireccionesService,
   SubdireccionesService,
   UsuariosService,
   TicketsService,
   ServiciosService
-} from "../../../servicios/servicio.index";
+} from '../../../servicios/servicio.index';
 
 @Component({
-  selector: "app-agregar",
-  templateUrl: "./agregar.component.html"
+  selector: 'app-agregar',
+  templateUrl: './agregar.component.html'
 })
 export class AgregarComponent implements OnInit {
-  @ViewChild("f") userFrm: NgForm;
+  @ViewChild('f') userFrm: NgForm;
   nuevo = true;
   errMsj = null;
   load = true;
@@ -25,21 +25,21 @@ export class AgregarComponent implements OnInit {
   servicios: any[];
   forma = {
     idticket: '0',
-    nombre: "",
-    correo: "",
-    telefono: "",
-    extension: "",
+    nombre: '',
+    correo: '',
+    telefono: '',
+    extension: '',
     iddireccion: 0,
     idsubdireccion: 0,
     area: 2,
-    descripcion: "",
-    medio: "",
-    oficio: "N/A",
-    equipo: "",
-    idusuario: 0,
-    idservicio: "",
-    ip: "",
-    mac: ""
+    descripcion: '',
+    medio: '',
+    oficio: 'N/A',
+    equipo: '',
+    idusuario_asignado: 0,
+    idservicio: '',
+    ip: '',
+    mac: ''
   };
 
   constructor(
@@ -52,7 +52,7 @@ export class AgregarComponent implements OnInit {
     private _serviciosService: ServiciosService,
   ) {
     this.route.params.subscribe(parametros => {
-      let idticket = parametros["idticket"];
+      let idticket = parametros['idticket'];
       this.cargarDirecciones();
       this.cargarUsuarios();
       this.cargarServicios();
@@ -66,14 +66,14 @@ export class AgregarComponent implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   agregar(forma: NgForm) {
     this.load = true;
     if (this.nuevo) {
       this._ticketsService.agregarTicket(this.forma).subscribe(
         data => {
-          this.router.navigate(["/tickets"]);
+          this.router.navigate(['/tickets']);
           this.load = false;
         },
         err => {
@@ -85,7 +85,7 @@ export class AgregarComponent implements OnInit {
     } else {
       this._ticketsService.actualizarTicket(this.forma).subscribe(
         data => {
-          this.router.navigate(["/tickets"]);
+          this.router.navigate(['/tickets']);
           this.load = false;
         },
         err => {
@@ -100,6 +100,7 @@ export class AgregarComponent implements OnInit {
     this._ticketsService.getTicket(this.forma.idticket).subscribe(
       data => {
         this.forma = data.registro;
+        this.cambioDireccion(false);
         this.load = false;
       },
       err => {
@@ -109,24 +110,26 @@ export class AgregarComponent implements OnInit {
     );
   }
 
-  oficio(){
-    if (this.forma.medio=="Oficio"){
-      this.forma.oficio="";
-    }else{
-      this.forma.oficio="N/A";
+  oficio() {
+    if (this.forma.medio == 'Oficio') {
+      this.forma.oficio = '';
+    } else {
+      this.forma.oficio = 'N/A';
     }
   }
 
-  cambioDireccion(){
+  cambioDireccion(val) {
     this.subdirecciones = [];
-    this.forma.idsubdireccion = 0;
-    this.forma.area = 2;
+    if (val) {
+      this.forma.idsubdireccion = 0;
+      this.forma.area = 2;
+    }
     this.cargarSubDirecciones();
   }
 
   cambioSubdireccion() {
     this.subdirecciones.forEach(d => {
-      if (d.idsubdireccion == this.forma.idsubdireccion ){
+      if (d.idsubdireccion == this.forma.idsubdireccion) {
 
         this.forma.area = d.area;
 

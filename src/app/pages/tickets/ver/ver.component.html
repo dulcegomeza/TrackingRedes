@@ -1,3 +1,171 @@
-<p>
-  ver works!
-</p>
+<div class="row">
+  <div class="col-12">
+    <div custom-loading [load]="load" class="card">
+      <div class="sk-folding-cube sk-spinner">
+        <div class="sk-cube1 sk-cube"></div>
+        <div class="sk-cube2 sk-cube"></div>
+        <div class="sk-cube4 sk-cube"></div>
+        <div class="sk-cube3 sk-cube"></div>
+      </div>
+      <div class="card-body">        
+        <button type="button" class="btn btn-primary mr-1">Asignar</button>
+        <button type="button" class="btn btn-primary mr-1">Cambiar Estado</button>
+        <button type="button" class="btn btn-primary mr-1">Comentario</button>
+        <p class="alert alert-danger mt-2 text-center" role="alert" *ngIf="errMsj">
+          {{errMsj}}
+        </p>
+      </div>
+    </div>
+    <div custom-loading [load]="load" class="card">
+      <div class="sk-folding-cube sk-spinner">
+        <div class="sk-cube1 sk-cube"></div>
+        <div class="sk-cube2 sk-cube"></div>
+        <div class="sk-cube4 sk-cube"></div>
+        <div class="sk-cube3 sk-cube"></div>
+      </div>
+      <div class="card-body">
+        <div class="d-flex flex-wrap m-b-30 b-b">
+          <div>
+            <h3 class="card-title"><span class="lstick"></span>Ver Ticket: <span style="color:#2a5ea1">{{ticket.idticket}}</span></h3>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <div class="row mb-1">
+              <div class="col-6 text-right">
+                Estado:
+              </div>
+              <div class="col-6 font-weight-bold">
+                {{ticket.idestado}}
+              </div>
+            </div>
+            <div class="row mb-1">
+              <div class="col-6 text-right">
+                Fecha:
+              </div>
+              <div class="col-6 font-weight-bold">
+                {{ticket.fecha_creacion | date}}
+              </div>
+            </div>
+            <div class="row mb-1">
+              <div class="col-6 text-right">
+                Solicitante:
+              </div>
+              <div class="col-6 font-weight-bold">
+                {{ticket.nombre}}
+              </div>
+            </div>
+            <div class="row mb-1">
+              <div class="col-6 text-right">
+                Telefono:
+              </div>
+              <div class="col-6 font-weight-bold">
+                {{ticket.telefono}}
+              </div>
+            </div>
+            <div class="row mb-1">
+              <div class="col-6 text-right">
+                Extension:
+              </div>
+              <div class="col-6 font-weight-bold">
+                {{ticket.extension}}
+              </div>
+            </div>
+            <div class="row mb-1">
+              <div class="col-6 text-right">
+                Correo:
+              </div>
+              <div class="col-6 font-weight-bold">
+                {{ticket.correo}}
+              </div>
+            </div>
+            <div class="row mb-1">
+              <div class="col-6 text-right">
+                Asigando a:
+              </div>
+              <div class="col-6 font-weight-bold">
+                {{ticket.idusuario_asignado}}
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="row mb-1">
+              <div class="col-6 text-right">
+                Secretaria:
+              </div>
+              <div class="col-6 font-weight-bold">
+                {{ticket.idsecretaria}}
+              </div>
+            </div>
+            <div class="row mb-1">
+              <div class="col-6 text-right">
+                Direcci&oacute;n:
+              </div>
+              <div class="col-6 font-weight-bold">
+                {{ticket.iddireccion}}
+              </div>
+            </div>
+            <div class="row mb-1">
+              <div class="col-6 text-right">
+                Subdirecci&oacute;n:
+              </div>
+              <div class="col-6 font-weight-bold">
+                {{ticket.idsubdireccion}}
+              </div>
+            </div>            
+            <div class="row mb-1">
+              <div class="col-6 text-right">
+                Medio:
+              </div>
+              <div class="col-6 font-weight-bold">
+                {{ticket.medio}}
+              </div>
+            </div>
+            <div class="row mb-1">
+              <div class="col-6 text-right">
+                Equipo:
+              </div>
+              <div class="col-6 font-weight-bold">
+                {{ticket.equipo}}
+              </div>
+            </div>
+            <div class="row mb-1">
+              <div class="col-6 text-right">
+                Ip:
+              </div>
+              <div class="col-6 font-weight-bold">
+                {{ticket.ip}}
+              </div>
+            </div>
+            <div class="row mb-1">
+              <div class="col-6 text-right">
+                MAC:
+              </div>
+              <div class="col-6 font-weight-bold">
+                {{ticket.mac}}
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="row mb-1">
+              <div class="col-3 text-right">
+                Descripci&oacute;n:
+              </div>
+              <div class="col-9 font-weight-bold">
+                {{ticket.descripcion}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <p class="alert alert-danger mt-2 text-center" role="alert" *ngIf="0">
+              No hay datos
+            </p>
+          </div>
+          <hr>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
