@@ -29,9 +29,6 @@ export class AgregarComponent {
     password: "",
     idrol: "1",
     correo: "",
-    idsecretaria: null,
-    iddireccion: null,
-    idsubdireccion: null,
     nuevo: null
   };
   roles: any[];
@@ -44,9 +41,6 @@ export class AgregarComponent {
 
   constructor(
     private _usuariosService: UsuariosService,
-    private _secretariasService: SecretariasService,
-    private _direccionesService: DireccionesService,
-    private _subdireccionesService: SubdireccionesService,
     private _authService: AuthService,
     private router: Router,
     private route: ActivatedRoute
@@ -55,7 +49,6 @@ export class AgregarComponent {
       let idusuario = parametros["idusuario"];
       this.usuario = this._authService.getPlayLoad().data;
       this.cargarRoles();
-      this.cargarSecretarias();
 
       if (idusuario > 0) {
         this.forma.idusuario = idusuario;
@@ -114,9 +107,6 @@ export class AgregarComponent {
       data => {
         this.forma = data.registro;
         this.load = false;
-        this.cargarDirecciones();
-        this.cargarSubdirecciones();
-        console.log(this.forma);
       },
       err => {
         this.errMsj = err.error.mensaje;
@@ -125,66 +115,6 @@ export class AgregarComponent {
     );
   }
 
-  cargarSecretarias() {
-    this._secretariasService.getSecretariasActivas().subscribe(
-      data => {
-        this.secretarias = data.registros;
-        this.load = false;
-      },
-      err => {
-        this.errMsj = err.error.mensaje;
-        this.load = false;
-      }
-    );
-  }
-
-  cambioSecretaria() {
-    this.direcciones = [];
-    this.cargarDirecciones();
-    this.forma.idsubdireccion = null;
-    this.forma.iddireccion = null;
-  }
-
-  cambioDireccion() {
-    this.subdirecciones = [];
-    this.cargarSubdirecciones();
-    this.forma.idsubdireccion = null;
-  }
-
-  cargarDirecciones() {
-    this._direccionesService
-      .getDireccionesPorSecretaria(this.forma.idsecretaria)
-      .subscribe(
-        data => {
-          this.direcciones = data.registros;
-          this.load = false;
-        },
-        err => {
-          this.errMsj = err.error.mensaje;
-          this.load = false;
-        }
-      );
-  }
-
-  cargarSubdirecciones() {
-    this.subdirecciones = [];
-    this._subdireccionesService
-      .getSubdireccionesPorDireccion(this.forma.iddireccion)
-      .subscribe(
-        data => {
-          this.subdirecciones = data.registros;
-          this.load = false;
-        },
-        err => {
-          this.errMsj = err.error.mensaje;
-          this.load = false;
-        }
-      );
-  }
-
-  subdireccion() {
-    console.log(this.forma);
-  }
 
   buscarUsuarioRepetido() {
 

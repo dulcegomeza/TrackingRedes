@@ -43,36 +43,7 @@
             </select>
                         </div>
 
-                        <div class="form-group">
-                            <label>Secretaria</label>
-                            <select class="custom-select col-12" [(ngModel)]="forma.idsecretaria" (ngModelChange)="cambioSecretaria()" name="idsecretaria" required>
-              <option *ngFor="let s of secretarias" value="{{s.idsecretaria}}">{{s.secretaria}}</option>
-            </select>
-                        </div>
 
-                        <div class="form-group" *ngIf="forma.idsecretaria != null">
-                            <label>Direccion</label>
-                            <select class="custom-select col-12" [(ngModel)]="forma.iddireccion" (ngModelChange)="cambioDireccion()" name="iddireccion" required>
-              <option *ngFor="let d of direcciones" value="{{d.iddireccion}}">{{d.direccion}}</option>
-            </select>
-                        </div>
-
-                        <div class="form-group" *ngIf="forma.iddireccion != null">
-                            <label>Subdireccion</label>
-                            <select class="custom-select col-12" [(ngModel)]="forma.idsubdireccion" name="idsubdireccion" (ngModelChange)="subdireccion()" required>
-              <option *ngFor="let s of subdirecciones" value="{{s.idsubdireccion}}">{{s.subdireccion}}</option>
-            </select>
-                        </div>
-
-                        <div class="form-group" *ngIf="usuario.idusuario != forma.idusuario">
-                            <label>Estado: </label>
-                            <span [ngSwitch]="forma.activo" class="font-bold">
-              <button type="button" class="btn btn-success text-center font-bold btn-sm" style="width:100px"
-                *ngSwitchCase="1" (click)="forma.activo = '0'">Activo</button>
-              <button type="button" class="btn btn-danger text-center font-bold btn-sm" style="width:100px"
-                *ngSwitchCase="0" (click)="forma.activo = '1'">Inactivo</button>
-            </span>
-                        </div>
                     </div>
 
                     <hr>

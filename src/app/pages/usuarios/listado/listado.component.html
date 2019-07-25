@@ -62,10 +62,10 @@
                                         <td> <label class="label label-success" *ngIf="u.activo == 1">Activo</label>
                                             <label class="label label-danger" *ngIf="u.activo == 0">Inactivo</label></td>
                                         <td width="6%">
-                                            <button type="button" class="btn btn-primary btn-sm" [routerLink]="['editar', u.idusuario]"><i
+                                            <button type="button" class="btn btn-primary btn-sm mr-1" [routerLink]="['editar', u.idusuario]"><i
                         class="fa fa-pencil"></i></button>
 
-                                            <button type="button" *ngIf="u.activo == 1 && usuario.idusuario != u.idusuario" class="btn btn-danger btn-sm" (click)="cambiarEstado(u.idusuario, 0, u.nombre)"><i
+                                            <button type="button" *ngIf="u.activo == 1 && usuario.idusuario != u.idusuario" class="btn btn-danger btn-sm " (click)="cambiarEstado(u.idusuario, 0, u.nombre)"><i
                               class="fa fa-times"></i></button>
                                             <button type="button" *ngIf="u.activo != 1 && usuario.idusuario != u.idusuario" class="btn btn-success btn-sm" (click)="cambiarEstado(u.idusuario, 1, u.nombre)"><i
                               class="fa fa-check"></i></button>
