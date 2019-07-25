@@ -18,21 +18,26 @@ export class VerComponent {
     equipo: '',
     extension: '',
     fecha_creacion: '',
-    idsecretaria: '',
-    iddireccion: '',
-    idestado: '',
-    idservicio: '',
-    idsubdireccion: '',
+    secretaria: '',
+    direccion: '',
+    estado: '',
+    color: '',
+    servicio: '',
+    subdireccion: '',
     idticket: '',
     idusuario: '',
     idusuario_asignado: '',
+    usuario_asignado: '',
+    capturo: '',
     ip: '',
     mac: '',
     medio: '',
-    nombre: '',
+    solicitante: '',
     oficio: '',
     telefono: '',
   };
+
+  padding:string="5px";
   constructor(
     private _ticketsService: TicketsService,
     private router: Router,
@@ -48,6 +53,7 @@ export class VerComponent {
     this._ticketsService.getTicketDetalle(this.ticket.idticket).subscribe(
       data => {
         this.ticket = data.registro;
+        console.log(data.registro);
         this.load = false;
       },
       err => {

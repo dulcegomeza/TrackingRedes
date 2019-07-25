@@ -26,6 +26,7 @@ export class ListadoComponent implements OnInit {
   filtros: any;
   errMsj = null;
 
+  
 
 
   constructor(
@@ -43,6 +44,7 @@ export class ListadoComponent implements OnInit {
       'secretaria': '',
       'subdireccion': '',
       'idestado': '',
+      'idrol_asignado':'',
       'idusuario_asignado': ''
     };
     this.cargar();
@@ -117,13 +119,22 @@ export class ListadoComponent implements OnInit {
   }
 
   cargarUsuarios() {
-    this._usuariosService.getUsuariosFiltros(this.filtros.idrol).subscribe(
-      data => {
-        this.usuarios = data.registros;
-      },
-      err => {
-        this.usuarios = null;
-      }
-    );
+    console.log('entra get filtro usuarios');
+    console.log(this.filtros.idrol_asignado);
+    this.usuarios = null;
+    this._usuariosService
+      .getUsuariosFiltros(this.filtros.idrol_asignado)
+      .subscribe(
+        data => {
+          this.usuarios = data.registros;
+          console.log(this.usuarios);
+          this.filtrar();
+        },
+        err => {
+          this.usuarios = null;
+        }
+      );
+
+     
   }
 }
