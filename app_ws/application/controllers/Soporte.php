@@ -160,7 +160,7 @@ class Soporte extends REST_Controller
         if ($this->validarJWT($headerToken)) {
             $idusuario = $this->uri->segment(3);
             $where = array('idusuario' => $idusuario);
-            $this->db->select('idusuario, nombre, activo, idrol, correo, idsecretaria, iddireccion, idsubdireccion');
+            $this->db->select('idusuario, nombre, activo, idrol, correo');
             $query = $this->db->get_where('view_usuarios', $where, 1);
 
             if ($query && $query->num_rows() >= 1) {
@@ -326,16 +326,12 @@ class Soporte extends REST_Controller
                 $correo = $this->put('correo');
                 $idrol = $this->put('idrol');
                 $password = $this->put('password');
-                $activo = $this->put('activo');
-                $idsubdireccion = $this->put('idsubdireccion');
 
                 $data_limpia = array(
                     'idusuario' => $idusuario,
                     'nombre' => $nombre,
                     'correo' => $correo,
                     'idrol' => $idrol,
-                    'activo' => $activo,
-                    'idsubdireccion' => $idsubdireccion,
                 );
 
                 if (!empty($password)) {
@@ -379,20 +375,17 @@ class Soporte extends REST_Controller
         if ($this->validarJWT($headerToken)) {
 
             $nombre = $this->post('nombre');
-            $activo = $this->post('activo');
             $correo = $this->post('correo');
             $idrol = $this->post('idrol');
-            $idsubdireccion = $this->post('idsubdireccion');
             $psw = $this->post('password');
             $password = password_hash($psw, PASSWORD_BCRYPT);
 
             $data_limpia = array(
                 'nombre' => $nombre,
-                'activo' => $activo,
                 'correo' => $correo,
                 'idrol' => $idrol,
                 'password' => $password,
-                'idsubdireccion' => $idsubdireccion,
+                'activo' => 1,
             );
 
             $insert = $this->db->insert('usuarios', $data_limpia);
