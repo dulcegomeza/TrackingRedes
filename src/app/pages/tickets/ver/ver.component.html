@@ -8,8 +8,8 @@
                 <div class="sk-cube3 sk-cube"></div>
             </div>
             <div class="card-body">
-                <button type="button" class="btn btn-primary mr-1">Asignar</button>
-                <button type="button" class="btn btn-primary mr-1">Cambiar Estado</button>
+                <button type="button" class="btn btn-primary mr-1" (click)="open(content)"><i class="fa fa-user"></i> Asignar</button>
+                <button type="button" class="btn btn-primary mr-1"><i class="fa fa-clock-o"></i> Cambiar Estado</button>
                 <button type="button" class="btn btn-primary mr-1">Comentario</button>
                 <p class="alert alert-danger mt-2 text-center" role="alert" *ngIf="errMsj">
                     {{errMsj}}
@@ -175,5 +175,34 @@
                 </div>
             </div>
         </div>
+
+
+        <ng-template #content let-posicionar let-d="dismiss">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modal-basic-title">Asignar ticket</h4>
+                <button type="button " class="close" aria-label="Close" (click)="d( 'Cross click') ">
+                <span aria-hidden="true ">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label>Asignar a:</label>
+                        <select class="form-control" name="idusuario" [(ngModel)]="asignar.idusuario">
+                            <option  *ngFor="let usuario of usuarios" [hidden]="usuario.idusuario==usuario_actual"   [value]="usuario.idusuario" >{{usuario.nombre}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Comentario:</label>
+                        <textarea class="form-control" name="comentario" [(ngModel)]="asignar.comentario"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button " class="btn btn-danger pull-left " (click)="d( 'Cross click') ">Cancelar</button>
+                <button type="button" class="btn btn-outline-primary" [disabled]="asignar.comentario == '' || asignar.idusuario == ''" (click)="asignarUsuario(d)">Asignar</button>
+            </div>
+        </ng-template>
+
     </div>
 </div>
