@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
+import { AsignarComponent } from '../asignar/asignar.component';
 import {
   UsuariosService,
   TicketsService
@@ -44,19 +45,14 @@ export class VerComponent {
     oficio: "",
     telefono: ""
   };
-  asignar = {
-    idusuario: "",
-    comentario: "",
-    idticket: ""
-  };
 
-  padding: string = "5px";
+  padding = "5px";
   closeResult: string;
   usuarios: any;
-  usuario_actual:any;
+  usuario_actual: any;
+
   constructor(
     private _ticketsService: TicketsService,
-    private _usuariosService: UsuariosService,
     public modalService: NgbModal,
     public activeModal: NgbActiveModal,
     private router: Router,
@@ -73,7 +69,6 @@ export class VerComponent {
       data => {
         this.ticket = data.registro;
         console.log(data.registro);
-        this.asignar.idticket = data.registro.idticket;
         this.load = false;
       },
       err => {
@@ -83,32 +78,9 @@ export class VerComponent {
     );
   }
 
-  cargarUsuarios() {
-    this._usuariosService.getUsuariosActivos().subscribe(
-      data => {
-        this.usuarios = data.registros;
-        console.log(this.usuarios);
-        this.load = false;
-      },
-      err => {
-        this.errMsj = err.error.mensaje;
-        this.load = false;
-      }
-    );
+  open() {
+    const modal = this.modalService.open(AsignarComponent);
+    modal.componentInstance.idticket = this.ticket.idticket;
   }
 
-  open(content) {
-    this.cargarUsuarios();
-    this.asignar.comentario = "";
-    this.asignar.idusuario = "";
-    this.usuario_actual = this.ticket.idusuario_asignado;
-    this.modalService
-      .open(content, { ariaLabelledBy: "modal-basic-title" })
-      .result.then(result => {}, reason => {});
-  }
-
-  asignarUsuario(d) {
-    console.log(this.asignar);
-    d("changed");
-  }
 }
