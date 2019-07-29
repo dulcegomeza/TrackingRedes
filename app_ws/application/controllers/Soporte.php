@@ -1324,7 +1324,7 @@ class Soporte extends REST_Controller
             $filtros = $this->post('filtros');
             $filtros = (array) $filtros;
             $campos = array('*');
-            $respuesta = paginar_todo('view_tickets', $pagina, $por_pagina, $campos, $filtros);
+            $respuesta = paginar_todo('view_ticketsp', $pagina, $por_pagina, $campos, $filtros);
             $status = 200;
         } else {
             $respuesta = array(
@@ -1542,14 +1542,11 @@ class Soporte extends REST_Controller
             $idticket = $this->uri->segment(3);
             $where = array('idticket' => $idticket);
             $this->db->select('*');
-            $query = $this->db->get_where('tickets', $where, 1);
+            $query = $this->db->get_where('view_tickets_detalle', $where, 1);
 
             if ($query && $query->num_rows() >= 1) {
                 $datos = $query->row();
-                $idsubdireccion = $query->row('idsubdireccion');
-                $qiddir = $this->db->select('iddireccion')->from('subdirecciones')->where('idsubdireccion', $idsubdireccion)->get();
-                $iddireccion = $qiddir->row('iddireccion');
-                $datos->iddireccion = $iddireccion;
+
                 $respuesta = array(
                     'mensaje' => 'Registro cargado correctamente',
                     'registro' => $datos,

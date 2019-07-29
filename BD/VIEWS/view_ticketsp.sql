@@ -1,0 +1,7 @@
+CREATE OR REPLACE VIEW view_ticketsp as select distinct t.idticket, t.fecha_creacion,t.nombre, t.descripcion,t.idsubdireccion, t.idusuario, s.subdireccion,s.iddireccion,d.idsecretaria,sec.secretaria,u.nombre AS capturo,t.idestado,e.color,
+(select distinct ta.idusuario_asignado 
+from tickets_asignaciones ta where (ta.idasignacion = (select distinct max(tickets_asignaciones.idasignacion) AS m from tickets_asignaciones where (tickets_asignaciones.idticket = t.idticket) group by tickets_asignaciones.idticket limit 1))) AS idusuario_asignado,
+
+(select usuarios.idrol from usuarios where (usuarios.idusuario = (select distinct ta.idusuario_asignado from tickets_asignaciones ta where (ta.idasignacion = (select distinct max(tickets_asignaciones.idasignacion) AS m from tickets_asignaciones where (tickets_asignaciones.idticket = t.idticket) group by tickets_asignaciones.idticket limit 1))))) AS idrol_asignado 
+
+from ((((((tickets t join subdirecciones s on((s.idsubdireccion = t.idsubdireccion))) join direcciones d on((d.iddireccion = s.iddireccion))) join secretarias sec on((sec.idsecretaria = d.idsecretaria))) join usuarios u on((u.idusuario = t.idusuario))) join estados e on((e.idestado = t.idestado))) join tickets_asignaciones on((tickets_asignaciones.idticket = t.idticket))) order by t.idticket desc
