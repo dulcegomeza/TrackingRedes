@@ -19,21 +19,22 @@
 
                         <div class="form-group">
                             <label>Nombre: </label>
-                            <input [(ngModel)]="forma.estado" upperCase name="estado" type="text" class="form-control" required>
+                            <input [(ngModel)]="forma.estado" upperCase name="estado" type="text" class="form-control"
+                                required readonly>
                         </div>
                         <div class="form-group">
                             <label>Color</label>
                             <input class="form-control" [(ngModel)]="forma.color" name="color" type="color">
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label>Estado: </label>
                             <span [ngSwitch]="forma.activo" class="font-bold">
-                <button type="button" class="btn btn-success text-center font-bold btn-sm" style="width:100px"
-                  *ngSwitchCase="1" (click)="forma.activo = '0'">Activo</button>
-                <button type="button" class="btn btn-danger text-center font-bold btn-sm" style="width:100px"
-                  *ngSwitchCase="0" (click)="forma.activo = '1'">Inactivo</button>
-              </span>
-                        </div>
+                                <button type="button" class="btn btn-success text-center font-bold btn-sm"
+                                    style="width:100px" *ngSwitchCase="1" (click)="forma.activo = '0'">Activo</button>
+                                <button type="button" class="btn btn-danger text-center font-bold btn-sm"
+                                    style="width:100px" *ngSwitchCase="0" (click)="forma.activo = '1'">Inactivo</button>
+                            </span>
+                        </div> -->
                     </div>
 
                     <hr>
@@ -42,8 +43,9 @@
                             <button type="button" [routerLink]="['/estados']" class="btn btn-danger">Cancelar</button>
                         </div>
                         <div class="col text-right">
-                            <button [disabled]="!f.valid" class="btn btn-primary" type="submit"><i class="fa fa-save"></i>
-                Guardar</button>
+                            <button [disabled]="!f.valid" class="btn btn-primary" type="submit"><i
+                                    class="fa fa-save"></i>
+                                Guardar</button>
                         </div>
                     </div>
                     <div class="alert alert-danger mt-2" role="alert" *ngIf="errMsj">

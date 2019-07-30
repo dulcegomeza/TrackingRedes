@@ -1,0 +1,1 @@
+CREATE OR REPLACE VIEW view_tickets_estados as SELECT te.idticketestado, te.idticket, te.fecha_creacion as fecha, e.estado, e.color, te.comentario, u.nombre as usuario, ua.nombre as asignado FROM tickets_estados AS te JOIN estados as e ON te.idestado = e.idestado JOIN usuarios as u ON te.idusuario = u.idusuario JOIN usuarios as ua ON te.idusuario_asignado = ua.idusuario

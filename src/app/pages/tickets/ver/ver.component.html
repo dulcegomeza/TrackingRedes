@@ -8,9 +8,11 @@
                 <div class="sk-cube3 sk-cube"></div>
             </div>
             <div class="card-body">
-                <button type="button" class="btn btn-primary mr-1" (click)="open()"><i class="fa fa-user"></i> Asignar</button>
-                <button type="button" class="btn btn-primary mr-1"><i class="fa fa-clock-o"></i> Cambiar Estado</button>
-                <button type="button" class="btn btn-primary mr-1">Comentario</button>
+                <button *ngIf="ticket.idestado != '4' && ticket.idestado != '6'" type="button" class="btn btn-primary mr-1" (click)="asignar()"><i class="fa fa-user-plus"></i>
+                    Asignar</button>
+                <button *ngIf="ticket.idestado != '4' && ticket.idestado != '6'" type="button" class="btn btn-primary mr-1" (click)="cam_estado()"><i class="fa fa-exchange"></i>
+                    Cambiar Estado</button>
+                <button type="button" class="btn btn-primary mr-1" (click)="comentario()"><i class="fa fa-comments"></i> Comentario</button>
                 <p class="alert alert-danger mt-2 text-center" role="alert" *ngIf="errMsj">
                     {{errMsj}}
                 </p>
@@ -26,7 +28,8 @@
             <div class="card-body">
                 <div class="d-flex flex-wrap m-b-30 b-b">
                     <div>
-                        <h3 class="card-title"><span class="lstick"></span>Ver Ticket: <span style="color:#2a5ea1">{{ticket.idticket}}</span></h3>
+                        <h3 class="card-title"><span class="lstick"></span>Ver Ticket: <span
+                                style="color:#2a5ea1">{{ticket.idticket}}</span></h3>
                     </div>
                 </div>
                 <div class="row">
@@ -36,7 +39,9 @@
                                 Estado:
                             </div>
                             <div class="col-6 ">
-                                <span class="label label-default label-personalizado" [style.backgroundColor]="ticket.color" [style.padding]="padding">{{ticket.estado}}</span>
+                                <span class="label label-default label-personalizado"
+                                    [style.backgroundColor]="ticket.color"
+                                    [style.padding]="padding">{{ticket.estado}}</span>
                             </div>
                         </div>
                         <div class="row mb-1">
@@ -164,6 +169,77 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="row pt-3">
+                    <ngb-tabset>
+                        <ngb-tab>
+                            <ng-template ngbTabTitle><i class="fa fa-comments"></i> Comentarios</ng-template>
+                            <ng-template ngbTabContent>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <th>Fecha</th>
+                                            <th>Usuario</th>
+                                            <th>Comentario</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let comentario of ticket.comentarios">
+                                                <td>{{comentario.fecha | date:'medium'}}</td>
+                                                <td>{{comentario.usuario}}</td>
+                                                <td>{{comentario.comentario}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </ngb-tab>
+                        <ngb-tab>
+                            <ng-template ngbTabTitle><i class="fa fa-exchange"></i> Estados</ng-template>
+                            <ng-template ngbTabContent>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <th>Fecha</th>
+                                            <th>Estado</th>
+                                            <th>Usuario</th>
+                                            <th>Comentario</th>
+                                            <th>Asignado</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let estado of ticket.testados">
+                                                <td>{{estado.fecha | date:'medium'}}</td>
+                                                <td><span class="label label-default label-personalizado" [style.backgroundColor]="estado.color"
+                                                    [style.padding]="padding">{{estado.estado}}</span></td>
+                                                <td>{{estado.usuario}}</td>
+                                                <td>{{estado.comentario}}</td>
+                                                <td>{{estado.asignado}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </ngb-tab>
+                        <ngb-tab>
+                            <ng-template ngbTabTitle><i class="fa fa-users"></i> Asignaciones</ng-template>
+                            <ng-template ngbTabContent>
+                                <p>Sed commodo, leo at suscipit dictum, quam est porttitor sapien, eget sodales nibh
+                                    elit id diam. Nulla
+                                    facilisi. Donec egestas ligula vitae odio interdum aliquet. Duis lectus turpis,
+                                    luctus eget tincidunt
+                                    eu, congue et odio. Duis pharetra et nisl at faucibus. Quisque luctus pulvinar arcu,
+                                    et molestie lectus
+                                    ultrices et. Sed diam urna, egestas ut ipsum vel, volutpat volutpat neque. Praesent
+                                    fringilla tortor
+                                    arcu. Vivamus faucibus nisl enim, nec tristique ipsum euismod facilisis. Morbi ut
+                                    bibendum est, eu
+                                    tincidunt odio. Orci varius natoque penatibus et magnis dis parturient montes,
+                                    nascetur ridiculus mus.
+                                    Mauris aliquet odio ac lorem aliquet ultricies in eget neque. Phasellus nec tortor
+                                    vel tellus pulvinar
+                                    feugiat.</p>
+                            </ng-template>
+                        </ngb-tab>
+                    </ngb-tabset>
                 </div>
                 <div class="row">
                     <div class="col-lg-12">

@@ -1,0 +1,1 @@
+CREATE OR REPLACE VIEW view_tickets_finalizado as SELECT t.idticket, t.idservicio, s.servicio, te.fecha_creacion as fecha_realizado FROM tickets as t JOIN servicios as s ON t.idservicio = s.idservicio JOIN tickets_estados as te ON t.idticket = te.idticket AND te.idestado = 4 WHERE t.idestado = 4

@@ -699,6 +699,56 @@ class Soporte extends REST_Controller
         $this->response($respuesta, $status);
     }
 
+    public function estados_filtro_get()
+    {
+        $headerToken = apache_request_headers()['Authorization'];
+
+        if ($this->validarJWT($headerToken)) {
+            $idestado = $this->uri->segment(3);
+            $this->db->where('activo', 1);
+            switch ($idestado) {
+                case '1':
+                case '2':
+                    $this->db->where_in('idestado', [3, 5, 6]);
+                    break;
+                case '3':
+                    $this->db->where_in('idestado', [4, 6]);
+                    break;
+                case '5':
+                    $this->db->where_in('idestado', [3, 6]);
+                    break;
+                case '4':
+                case '6':
+                    $this->db->where_in('idestado', [99999]);
+                    break;
+                default:
+                    // code...
+                    break;
+            };
+            $query = $this->db->get('estados');
+
+            if ($query && $query->num_rows() >= 1) {
+                $respuesta = array(
+                    'mensaje' => 'Registro cargado correctamente',
+                    'registros' => $query->result(),
+                );
+                $status = 200;
+            } else {
+                $respuesta = array(
+                    'mensaje' => 'Error interno',
+                    'error' => $this->db->error(),
+                );
+                $status = 500;
+            }
+        } else {
+            $respuesta = array(
+                'mensaje' => 'Acceso no autorizado',
+            );
+            $status = 401;
+        }
+        $this->response($respuesta, $status);
+    }
+
     public function direcciones_por_secretaria_get()
     {
         $headerToken = apache_request_headers()['Authorization'];
@@ -1384,7 +1434,6 @@ class Soporte extends REST_Controller
                 'idticket' => $idticket,
                 'idusuario' => $idusuario,
                 'idusuario_asignado' => $idusuario_asignado,
-                'tiempo' => 0,
                 'comentario' => '',
             );
 
@@ -1396,7 +1445,6 @@ class Soporte extends REST_Controller
                 'idusuario_asignado' => $idusuario_asignado,
                 'idestado' => 1,
                 'comentario' => '',
-                'tiempo' => 0,
             );
 
             $this->db->insert('tickets_estados', $data_estado);
@@ -1438,7 +1486,7 @@ class Soporte extends REST_Controller
                 $idservicio = $this->put('idservicio');
                 $idsubdireccion = $this->put('idsubdireccion');
                 $area = $this->put('area');
-                $nombre = $this->put('nombre');                
+                $nombre = $this->put('nombre');
                 $telefono = $this->put('telefono');
                 $extension = $this->put('extension');
                 $correo = $this->put('correo');
@@ -1462,7 +1510,7 @@ class Soporte extends REST_Controller
                     'oficio' => $oficio,
                     'equipo' => $equipo,
                     'ip' => $ip,
-                    'mac' => $mac
+                    'mac' => $mac,
                 );
 
                 $update = $this->db->where('idticket', $idticket)->update('tickets', $data_limpia);
@@ -1546,7 +1594,12 @@ class Soporte extends REST_Controller
 
             if ($query && $query->num_rows() >= 1) {
                 $datos = $query->row();
-
+                $idticket = $datos->idticket;
+                $comentarios = $this->db->select("fecha, comentario, usuario")->from("view_tickets_comentarios")->where('idticket', $idticket)->order_by('idcomentario', 'DESC')->get()->result();
+                $datos->comentarios = $comentarios;
+                $testados = $this->db->select("fecha, estado, color, comentario, usuario, asignado")->from("view_tickets_estados")->where('idticket', $idticket)->order_by('idticketestado', 'DESC')->get()->result();
+                $datos->comentarios = $comentarios;
+                $datos->testados = $testados;
                 $respuesta = array(
                     'mensaje' => 'Registro cargado correctamente',
                     'registro' => $datos,
@@ -1559,6 +1612,99 @@ class Soporte extends REST_Controller
                 );
                 $status = 500;
             }
+        } else {
+            $respuesta = array(
+                'mensaje' => 'Acceso no autorizado',
+            );
+            $status = 401;
+        }
+        $this->response($respuesta, $status);
+    }
+
+    public function ticket_estado_post()
+    {
+        $headerToken = apache_request_headers()['Authorization'];
+
+        if ($this->validarJWT($headerToken)) {
+
+            $idticket = $this->post('idticket');
+            $idusuario = $this->leerToken($headerToken)->data->idusuario;
+            $idusuario_asignado = $this->post('idusuario_asignado');
+            $idestado = $this->post('idestado');
+            $comentario = $this->post('comentario');
+
+            $data = array(
+                'idticket' => $idticket,
+                'idusuario' => $idusuario,
+                'idusuario_asignado' => $idusuario_asignado,
+                'idestado' => $idestado,
+                'comentario' => $comentario,
+            );
+
+            $this->db->trans_begin();
+            $this->db->insert('tickets_estados', $data);
+            $this->db->set('idestado', $idestado)->where('idticket', $idticket)->update('tickets');
+
+            if ($this->db->trans_status() === false) {
+                $this->db->trans_rollback();
+                $respuesta = array(
+                    'mensaje' => 'Error en insercion.',
+                    'error' => $this->db->error(),
+                );
+                $status = 409;
+            } else {
+                $this->db->trans_commit();
+                $respuesta = array(
+                    'mensaje' => 'Insercion correcta',
+                );
+                $status = 200;
+            }
+
+        } else {
+            $respuesta = array(
+                'mensaje' => 'Acceso no autorizado',
+            );
+            $status = 401;
+        }
+        $this->response($respuesta, $status);
+    }
+
+    public function comentario_post()
+    {
+        $headerToken = apache_request_headers()['Authorization'];
+
+        if ($this->validarJWT($headerToken)) {
+
+            $idticket = $this->post('idticket');
+            $idusuario = $this->leerToken($headerToken)->data->idusuario;
+            $comentario = $this->post('comentario');
+            $privado = $this->post('privado');
+
+            $data = array(
+                'idticket' => $idticket,
+                'idusuario' => $idusuario,
+                'comentario' => $comentario,
+                'privado' => $privado,
+            );
+
+            $this->db->trans_begin();
+            $this->db->insert('tickets_comentarios', $data);
+
+            if ($this->db->trans_status() === false) {
+                $this->db->trans_rollback();
+                $respuesta = array(
+                    'mensaje' => 'Error en insercion.',
+                    'error' => $this->db->error(),
+                );
+                $status = 409;
+            } else {
+                $this->db->trans_commit();
+                $respuesta = array(
+                    'mensaje' => 'Insercion correcta',
+                );
+                $status = 200;
+            }
+
         } else {
             $respuesta = array(
                 'mensaje' => 'Acceso no autorizado',
@@ -1630,17 +1776,16 @@ class Soporte extends REST_Controller
             $servicio = $this->post('servicio');
             $idusuario = $this->post('idusuario');
 
-
             $this->db->trans_begin();
             $data = array(
                 'servicio' => $servicio,
-                'activo'   => 1,
+                'activo' => 1,
                 'idusuario' => $this->leerToken($headerToken)->data->idusuario,
             );
 
             $insert = $this->db->insert('servicios', $data);
             $idservicio = $this->db->insert_id();
-            
+
             if ($this->db->trans_status() === false) {
 
                 $this->db->trans_rollback();
@@ -1711,7 +1856,7 @@ class Soporte extends REST_Controller
         $headerToken = apache_request_headers()['Authorization'];
 
         if ($this->validarJWT($headerToken)) {
-            
+
             $idservicio = $this->post('idservicio');
             $servicio = $this->post('servicio');
 
@@ -1759,7 +1904,7 @@ class Soporte extends REST_Controller
         $headerToken = apache_request_headers()['Authorization'];
 
         if ($this->validarJWT($headerToken)) {
-            $query = $this->db->get_where('servicios', array( 'activo' => 1));
+            $query = $this->db->get_where('servicios', array('activo' => 1));
 
             if ($query && $query->num_rows() >= 1) {
                 $respuesta = array(

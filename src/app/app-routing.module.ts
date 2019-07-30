@@ -63,6 +63,12 @@ export const Approutes: Routes = [
               canActivate: [RoleGuard],
               loadChildren:
                 "./pages/servicios/servicios.module#ServiciosModule"
+            },
+            {
+              path: "reportes",
+              canActivate: [RoleGuard],
+              loadChildren:
+                "./pages/reportes/reportes.module#ReportesModule"
             }
           ]
         },

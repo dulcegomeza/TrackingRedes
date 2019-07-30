@@ -1,0 +1,48 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="sk-folding-cube sk-spinner">
+                <div class="sk-cube1 sk-cube"></div>
+                <div class="sk-cube2 sk-cube"></div>
+                <div class="sk-cube4 sk-cube"></div>
+                <div class="sk-cube3 sk-cube"></div>
+            </div>
+            <div class="card-body">
+                <div class="modal-header">
+                    <p class="texto-azul">Agrear Comentario</p>
+                    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label>Comentario:</label>
+                            <textarea class="form-control" name="comentario" [(ngModel)]="forma.comentario"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Privado: </label>
+                            <span [ngSwitch]="forma.privado" class="font-bold ml-1">
+                                <button type="button" class="btn btn-success text-center font-bold btn-sm" style="width:100px" *ngSwitchCase="1"
+                                    (click)="forma.privado = '0'">SI</button>
+                                <button type="button" class="btn btn-danger text-center font-bold btn-sm" style="width:100px" *ngSwitchCase="0"
+                                    (click)="forma.privado = '1'">NO</button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <div class="col text-left">
+                        <button type="button" class="btn btn-danger" (click)="activeModal.close('Close click')">Cancelar</button>
+                    </div>
+                    <!--
+                    <div class="col text-right">
+                        <button class="btn btn-primary" (click)="agregar()"><i class="fa fa-save"></i> Guardar</button>
+                    </div> -->
+                    <button type="button" class="btn btn-primary" [disabled]="forma.comentario == ''"
+                        (click)="agregar()">Agregar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

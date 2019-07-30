@@ -23,15 +23,19 @@ function asignarMenu($idrol)
         ]
     );
 
+    $reportes = array(
+        'path' => '/reportes', 'title' => 'Reportes', 'icon' => 'fa fa-bar-chart', 'class' => '', 'label' => '', 'labelClass' => '', 'extralink' => false, 'submenu' => []
+    );
+
     switch ($idrol) {
         case '1':
             // ADMINISTRADOR
-            array_push($menu, $tickets, $catalogos);
+            array_push($menu, $tickets, $catalogos, $reportes);
             break;
 
         case '2':
             // GENERAL
-            array_push($menu, $tickets, $catalogos);
+            array_push($menu, $tickets, $catalogos, $reportes);
             break;
         default:
             break;
