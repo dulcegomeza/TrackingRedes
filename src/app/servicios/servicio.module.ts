@@ -9,6 +9,7 @@ import {
   SecretariasService,
   DireccionesService,
   EstadosService,
+  ReportesService,
   SubdireccionesService, TicketsService, ServiciosService
 } from "./servicio.index";
 import { UsuariosService } from "./usuarios.service";
@@ -25,6 +26,7 @@ import { UsuariosService } from "./usuarios.service";
     EstadosService,
     UsuariosService,
     TicketsService,
+    ReportesService,
     ServiciosService
   ],
   declarations: []

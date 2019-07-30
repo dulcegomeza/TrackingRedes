@@ -12,7 +12,8 @@ export { DireccionesService } from './direcciones.service';
 export { EstadosService } from './estados.service';
 export { UsuariosService } from './usuarios.service';
 export { TicketsService } from './tickets.service';
-export { ServiciosService} from './servicios.service'; 
+export { ServiciosService} from './servicios.service';
+export { ReportesService} from './reportes.service';
 
 
 
