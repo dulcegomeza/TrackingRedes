@@ -24,7 +24,8 @@
 
                         <div class="form-group">
                             <label>Correo</label>
-                            <input (focusout)="buscarUsuarioRepetido()" type="email" class="form-control" placeholder="Ingrese su correo" [(ngModel)]="forma.correo" name="correo" required>
+                            <input (focusout)="buscarUsuarioRepetido()" type="email" class="form-control"
+                                placeholder="Ingrese su correo" [(ngModel)]="forma.correo" name="correo" required>
                             <div *ngIf="correo_repetido" class="m-t-5 alert alert-danger" role="alert">
                                 Correo ya registrado.
                             </div>
@@ -32,27 +33,28 @@
 
                         <div class="form-group">
                             <label>Contraseña</label>
-                            <input *ngIf="nuevo" type="password" class="form-control" [(ngModel)]="forma.password" name="password" [required]="forma.idusuario === '0'">
-                            <input *ngIf="!nuevo" type="password" class="form-control" placeholder="Ingrese para actualizar" [(ngModel)]="forma.password" name="password" [required]="forma.idusuario === '0'">
+                            <input *ngIf="nuevo" type="password" class="form-control" [(ngModel)]="forma.password"
+                                name="password" [required]="forma.idusuario === '0'">
+                            <input *ngIf="!nuevo" type="password" class="form-control"
+                                placeholder="Ingrese para actualizar" [(ngModel)]="forma.password" name="password"
+                                [required]="forma.idusuario === '0'">
                         </div>
 
                         <div class="form-group">
                             <label>Tipo de Usuario</label>
                             <select class="custom-select col-12" [(ngModel)]="forma.idrol" name="idrol" required>
-              <option *ngFor="let rol of roles" value="{{rol.idrol}}">{{rol.rol}}</option>
-            </select>
+                                <option *ngFor="let rol of roles" value="{{rol.idrol}}">{{rol.rol}}</option>
+                            </select>
                         </div>
-
-
                     </div>
-
                     <hr>
                     <div class="row">
                         <div class="col text-left">
                             <button type="button" [routerLink]="['/usuarios']" class="btn btn-danger">Cancelar</button>
                         </div>
                         <div class="col text-right">
-                            <button [disabled]="!f.valid" class="btn btn-primary" type="submit"><i class="fa fa-save"></i> Guardar</button>
+                            <button [disabled]="!f.valid" class="btn btn-primary" type="submit"><i
+                                    class="fa fa-save"></i> Guardar</button>
                         </div>
                     </div>
                     <div class="alert alert-danger mt-2" role="alert" *ngIf="errMsj">

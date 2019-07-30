@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { AgregarComponent } from './agregar/agregar.component';
 import { ListadoComponent } from './listado/listado.component';
 import { AsignarComponent } from './asignar/asignar.component';
+import { CamEstadoComponent } from './cam_estado/cam_estado.component';
+import { ComentarioComponent } from './comentario/comentario.component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule, NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
@@ -16,7 +18,9 @@ import { NgSelectModule } from '@ng-select/ng-select';
     AgregarComponent,
     ListadoComponent,
     VerComponent,
-    AsignarComponent
+    AsignarComponent,
+    CamEstadoComponent,
+    ComentarioComponent
   ],
   imports: [
     CommonModule,
@@ -29,7 +33,9 @@ import { NgSelectModule } from '@ng-select/ng-select';
   ],
   providers: [NgbActiveModal],
   entryComponents: [
-    AsignarComponent
+    AsignarComponent,
+    CamEstadoComponent,
+    ComentarioComponent
   ],
 })
 export class TicketsModule {}

@@ -66,5 +66,12 @@ export class EstadosService {
     });
   }
 
+  getEstadosFiltro(idestado) {
+    let url = URL_SERVICIOS + `/estados_filtro/${idestado}`;
+    return this.http.get(url).map((resp: any) => {
+      return resp;
+    });
+  }
+
 
 }

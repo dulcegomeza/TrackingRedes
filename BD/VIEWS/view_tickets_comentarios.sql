@@ -1,0 +1,1 @@
+CREATE OR REPLACE VIEW view_tickets_comentarios as SELECT tc.idcomentario, tc.idticket, tc.fecha, tc.comentario, u.nombre as usuario FROM tickets_comentarios as tc JOIN usuarios as u ON tc.idusuario = u.idusuario

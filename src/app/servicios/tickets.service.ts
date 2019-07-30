@@ -57,5 +57,18 @@ export class TicketsService {
     });
   }
 
+  agregarComentario(comentario: any) {
+    let url = URL_SERVICIOS + '/comentario';
+    return this.http.post(url, comentario).map((resp: any) => {
+      return resp;
+    });
+  }
+
+  cambiarEstado(estado: any) {
+    let url = URL_SERVICIOS + '/ticket_estado';
+    return this.http.post(url, estado).map((resp: any) => {
+      return resp;
+    });
+  }
 
 }

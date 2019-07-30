@@ -1,6 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { AsignarComponent } from '../asignar/asignar.component';
+import { CamEstadoComponent } from '../cam_estado/cam_estado.component';
+import { ComentarioComponent } from '../comentario/comentario.component';
 import {
   UsuariosService,
   TicketsService
@@ -29,6 +31,7 @@ export class VerComponent {
     fecha_creacion: "",
     secretaria: "",
     direccion: "",
+    idestado: "",
     estado: "",
     color: "",
     servicio: "",
@@ -43,7 +46,9 @@ export class VerComponent {
     medio: "",
     solicitante: "",
     oficio: "",
-    telefono: ""
+    telefono: "",
+    comentarios: [],
+    testados: [],
   };
 
   padding = "5px";
@@ -65,6 +70,7 @@ export class VerComponent {
   }
 
   cargarDatos() {
+    this.load = true;
     this._ticketsService.getTicketDetalle(this.ticket.idticket).subscribe(
       data => {
         this.ticket = data.registro;
@@ -78,9 +84,31 @@ export class VerComponent {
     );
   }
 
-  open() {
+  asignar() {
     const modal = this.modalService.open(AsignarComponent);
     modal.componentInstance.idticket = this.ticket.idticket;
+  }
+
+  cam_estado() {
+    const modal = this.modalService.open(CamEstadoComponent);
+    modal.componentInstance.idusuario_asignado = this.ticket.idusuario_asignado;
+    modal.componentInstance.idticket = this.ticket.idticket;
+    modal.componentInstance.idestado = this.ticket.idestado;
+    modal.componentInstance.passEntry.subscribe((receivedEntry) => {
+      if (receivedEntry) {
+        this.cargarDatos();
+      }
+    });
+  }
+
+  comentario() {
+    const modal = this.modalService.open(ComentarioComponent);
+    modal.componentInstance.idticket = this.ticket.idticket;
+    modal.componentInstance.passEntry.subscribe((receivedEntry) => {
+      if (receivedEntry) {
+        this.cargarDatos();
+      }
+    });
   }
 
 }
