@@ -30,12 +30,12 @@ function asignarMenu($idrol)
     switch ($idrol) {
         case '1':
             // ADMINISTRADOR
-            array_push($menu, $tickets, $catalogos, $reportes);
+            array_push($menu, $tickets, $reportes, $catalogos);
             break;
 
         case '2':
             // GENERAL
-            array_push($menu, $tickets, $catalogos, $reportes);
+            array_push($menu, $tickets, $reportes, $catalogos);
             break;
         default:
             break;

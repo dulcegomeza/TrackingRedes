@@ -16,64 +16,71 @@
                 <p class="alert alert-danger mt-2 text-center" role="alert" *ngIf="errMsj">
                     {{errMsj}}
                 </p>
-                <!-- <button type="button" [routerLink]="['agregar']" class="btn btn-primary">Agregar Estado</button> -->
+                <div class="row" *ngIf="verCalen">
+                    <ngb-datepicker #dp (select)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t"
+                        outsideDays="hidden">
+                    </ngb-datepicker>
+
+                    <ng-template #t let-date let-focused="focused">
+                        <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)"
+                            [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date"
+                            (mouseleave)="hoveredDate = null;">
+                            {{ date.day }}
+                        </span>
+                    </ng-template>
+                </div>
+                <div class="row">
+                    <div class="col-7 mb-5">
+                        <div class="inline float-left ml-2 fechasbo" *ngIf="fromDate && toDate">
+                            <p class="form-control">{{fromDate.day}}/{{fromDate.month}}/{{fromDate.year}}</p>
+                            <button class="btn btn-outline-info btn-sm mb-1" (click)="verCalen = !verCalen"><i
+                                    class="fa fa-calendar"></i></button>
+                            <p class="form-control">{{toDate.day}}/{{toDate.month}}/{{toDate.year}}</p>
+                        </div>
+                        <div class="float-left ml-2" *ngIf="fromDate && toDate">
+                            <button type="button" class="btn btn-info ml-2" (click)="loadData()">
+                                Listar </button>
+                            <button type="button" class="btn btn-info ml-2" (click)="descargar()"><i
+                                    class="fa fa-file-word-o">
+                                </i> Descargar </button>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="col mb-2 text-right">
-                            Registros por pagina
-                            <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="rpp">
-                                <label ngbButtonLabel class="btn-primary" (click)="loadRpp(10)"> <input ngbButton
-                                        type="radio" [value]="10">
-                                    10 </label>
-                                <label ngbButtonLabel class="btn-primary" (click)="loadRpp(20)"><input ngbButton
-                                        type="radio" [value]="20">
-                                    20</label>
-                            </div>
-                        </div>
                         <div class="table-responsive">
                             <table class="table table-bordered table-sm">
                                 <thead>
                                     <tr>
-                                        <th>NOMBRE</th>
-                                        <th>COLOR</th>
-                                    </tr>
-                                    <!-- <tr>
-                                        <th><input [(ngModel)]="filtros.estado" autocomplete="off"
-                                                (ngModelChange)="filtrar()" name="estado"
-                                                class="form-control form-control-sm" type="text"></th>
-                                        <th><select [(ngModel)]="filtros.activo" (ngModelChange)="filtrar()"
-                                                class="form-control-sm custom-select">
-                                                <option value="">TODOS</option>
-                                                <option value="1">ACTIVOS</option>
-                                                <option value="0">INACTIVOS</option>
-                                            </select>
+                                        <th width="10px">
+                                            <button type="button" class="btn btn-outline-primary btn-sm"
+                                                (click)="selectAll()">
+                                                <i class="fa fa-check text-primary"></i>
+                                            </button>
                                         </th>
-                                    </tr> -->
+                                        <th>SERVICIO</th>
+                                        <th>TOTAL</th>
+                                    </tr>
                                 </thead>
-                                <tbody *ngIf="estados != null && estados.length != 0">
-                                    <tr *ngFor="let e of estados">
-                                        <td>{{e.estado}}</td>
-                                        <td [ngStyle]="{'background-color':e.color}"></td>
+                                <tbody *ngIf="servicios != null && servicios.length != 0">
+                                    <tr *ngFor="let e of servicios; let i = index">
+                                        <td>
+                                            <div class="custom-control custom-checkbox mr-sm-2 m-b-15">
+                                                <input type="checkbox" class="custom-control-input"
+                                                    [(ngModel)]="e.selected" id="{{i}}" value="{{e.idservicio}}">
+                                                <label class="custom-control-label" for="{{i}}"></label>
+                                            </div>
+                                        </td>
+                                        <td>{{e.servicio}}</td>
+                                        <td>{{e.total}}</td>
                                     </tr>
                                 </tbody>
                             </table>
                             <p class="alert alert-danger mt-2 text-center" role="alert"
-                                *ngIf="estados == null || estados.length == 0">
+                                *ngIf="servicios == null || servicios.length == 0">
                                 No hay datos
                             </p>
                         </div>
-                        <div class="row">
-                            <div class="col left">
-                                <ngb-pagination [collectionSize]="totalItems" [maxSize]="5" [(page)]="pageG"
-                                    [directionLinks]="true" (pageChange)="loadPage($event)" [rotate]="true"
-                                    [ellipses]="false" [boundaryLinks]="true">
-                                </ngb-pagination>
-                            </div>
-                            <div class="col text-right">
-                                Total de registros: {{totalCount}}
-                            </div>
-                        </div>
-                        <hr>
                     </div>
                 </div>
 

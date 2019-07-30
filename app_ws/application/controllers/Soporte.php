@@ -17,6 +17,7 @@ class Soporte extends REST_Controller
 
         $this->load->database();
         $this->load->library('excel');
+        $this->load->helper('data_tools');
 
     }
 
@@ -1995,4 +1996,48 @@ class Soporte extends REST_Controller
         $this->response($respuesta, $status);
     }
 
+    public function reporte_servicios_post()
+    {
+        $headerToken = apache_request_headers()['Authorization'];
+
+        if ($this->validarJWT($headerToken)) {
+            $fromDate = $this->post('fromDate');
+            $fromDate = arrayToDate($fromDate). ' 00:00:00';
+            $toDate = $this->post('toDate');
+            $toDate = arrayToDate($toDate). ' 23:59:59';
+            $query = $this->db->get_where('servicios', array('activo' => 1));
+
+            if ($query && $query->num_rows() >= 1) {
+                $datos = $query->result();
+                foreach ($datos as $row) {
+                    $idservicio = $row->idservicio;
+                    $this->db->where('fecha_realizado >=', $fromDate);
+                    $this->db->where('fecha_realizado <=', $toDate);
+                    $total = $this->db->select("COUNT(idticket) as total")->from("view_tickets_finalizado")->where('idservicio', $idservicio)->group_by('idservicio')->get()->row('total');
+                    $row->total = ($total)?$total:0;
+                    $row->selected = true;
+                }
+                $respuesta = array(
+                    'mensaje' => 'Registro cargado correctamente',
+                    'registros' => $datos,
+                    $fromDate,
+                    $toDate
+                );
+                $status = 200;
+            } else {
+                $respuesta = array(
+                    'mensaje' => 'Error interno',
+                    'error' => $this->db->error(),
+                );
+                $status = 500;
+            }
+
+        } else {
+            $respuesta = array(
+                'mensaje' => 'Acceso no autorizado',
+            );
+            $status = 401;
+        }
+        $this->response($respuesta, $status);
+    }
 }
