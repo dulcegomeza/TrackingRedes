@@ -19,7 +19,7 @@
                         <div class="form-group">
                             <label>Asignar a:</label>
                             <select class="form-control" name="idusuario" [(ngModel)]="asignar.idusuario">
-                                <option *ngFor="let usuario of usuarios" [hidden]="usuario.idusuario == idusuario"
+                                <option *ngFor="let usuario of usuarios" [hidden]="usuario.idusuario == idusuario_asignado"
                                     [value]="usuario.idusuario">{{usuario.nombre}}</option>
                             </select>
                         </div>
@@ -33,10 +33,6 @@
                     <div class="col text-left">
                         <button type="button" class="btn btn-danger" (click)="activeModal.close('Close click')">Cancelar</button>
                     </div>
-                    <!--
-                    <div class="col text-right">
-                        <button class="btn btn-primary" (click)="agregar()"><i class="fa fa-save"></i> Guardar</button>
-                    </div> -->
                     <button type="button" class="btn btn-outline-primary" [disabled]="asignar.comentario == '' || asignar.idusuario == ''"
                         (click)="asignarUsuario()">Asignar</button>
                 </div>

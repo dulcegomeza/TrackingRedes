@@ -87,6 +87,12 @@ export class VerComponent {
   asignar() {
     const modal = this.modalService.open(AsignarComponent);
     modal.componentInstance.idticket = this.ticket.idticket;
+    modal.componentInstance.idusuario_asignado = this.ticket.idusuario_asignado;
+    modal.componentInstance.passEntry.subscribe((receivedEntry) => {
+      if (receivedEntry) {
+        this.cargarDatos();
+      }
+    });
   }
 
   cam_estado() {
