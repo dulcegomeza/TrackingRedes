@@ -1,6 +1,10 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { UsuariosService } from '../../../servicios/usuarios.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import {
+  UsuariosService,
+  TicketsService
+} from '../../../servicios/servicio.index';
 
 @Component({
   selector: 'app-ngbd-asignar',
@@ -9,6 +13,8 @@ import { UsuariosService } from '../../../servicios/usuarios.service';
 })
 export class AsignarComponent implements OnInit {
   @Input() idticket;
+  @Input() idusuario_asignado;
+  @Output() passEntry: EventEmitter<any> = new EventEmitter();
   errMsj = null;
   load = false;
 
@@ -23,19 +29,31 @@ export class AsignarComponent implements OnInit {
 
   constructor(
     public activeModal: NgbActiveModal,
+    private _ticketsService: TicketsService,
+    private router: Router,
+    private route: ActivatedRoute,
     private _usuariosService: UsuariosService
   ) {
-    this.asignar.idticket = this.idticket;
   }
 
   ngOnInit() {
+    this.asignar.idticket = this.idticket;
     this.cargarUsuarios();
   }
 
+  asignarUsuario() {
+    this._ticketsService.asignar(this.asignar).subscribe(
+      data => {
+        this.passBack();
+        this.load = false;
+        this.activeModal.close("Close click");
+      },
+      err => {
+        this.errMsj = err.error.mensaje;
 
-  asignarUsuario(d) {
-    console.log(this.asignar);
-    d("changed");
+        this.load = false;
+      }
+    );
   }
 
   cargarUsuarios() {
@@ -51,4 +69,9 @@ export class AsignarComponent implements OnInit {
       }
     );
   }
+
+  passBack() {
+    this.passEntry.emit(true);
+  }
+
 }

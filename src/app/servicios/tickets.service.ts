@@ -71,4 +71,11 @@ export class TicketsService {
     });
   }
 
+  asignar(ticket: any) {
+    let url = URL_SERVICIOS + '/asignar_usuario';
+    return this.http.post(url, ticket).map((resp: any) => {
+    return resp;
+    });
+  }
+
 }

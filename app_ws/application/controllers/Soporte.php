@@ -1935,4 +1935,64 @@ class Soporte extends REST_Controller
         return $fechaFormateada;
     }
 
+    public function asignar_usuario_post()
+    {
+        $headerToken = apache_request_headers()['Authorization'];
+        
+        if ($this->validarJWT($headerToken)) {
+                
+                $idusuario = $this->leerToken($headerToken)->data->idusuario;
+                $idusuario_asignado = $this->post('idusuario');
+                $comentario = $this->post('comentario');
+                $idticket   = $this->post('idticket');
+
+                $data_ticket = array(
+                    'idestado' => 2,
+                    'idusuario_asignado' => $idusuario_asignado
+                );
+                $this->db->trans_begin();
+                $this->db->set($data_ticket)->where('idticket', $idticket)->update('tickets', $data_ticket);
+                
+                $data_ticket_asignaciones = array(
+                    'idusuario_asignado' => $idusuario_asignado,
+                    'comentario' => $comentario,
+                    'idusuario' => $idusuario,
+                    'idticket' => $idticket
+                );
+                
+                $this->db->insert('tickets_asignaciones', $data_ticket_asignaciones);
+                
+                $data_ticket_estados = array(
+                'idestado' => 2,
+                'idusuario_asignado' => $idusuario_asignado,
+                'comentario' => $comentario,
+                'idusuario' => $idusuario,
+                'idticket' => $idticket
+                );
+                
+                $this->db->insert('tickets_estados', $data_ticket_estados);
+                
+                if ($this->db->trans_status() === false) {
+                    $this->db->trans_rollback();
+                    $respuesta = array(
+                        'mensaje' => 'Error en actualizacion.',
+                    );
+                    $status = 409;
+                } else {
+                    $this->db->trans_commit();
+                    $respuesta = array(
+                        'mensaje' => 'Actualizacion correcta',
+                    );
+                    $status = 200;
+                } 
+                
+        } else {
+            $respuesta = array(
+                'mensaje' => 'Acceso no autorizado',
+            );
+            $status = 401;
+        }
+        $this->response($respuesta, $status);
+    }
+
 }
