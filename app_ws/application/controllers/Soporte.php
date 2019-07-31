@@ -1374,6 +1374,11 @@ class Soporte extends REST_Controller
             $por_pagina = $this->post('por_pagina');
             $filtros = $this->post('filtros');
             $filtros = (array) $filtros;
+            // $idrol = $this->leerToken($headerToken)->data->role;
+            // $idusuario = $this->leerToken($headerToken)->data->idusuario;
+            // if($idrol == 2){
+            //     $filtros['idusuario_asignado'] = $idusuario;
+            // }
             $campos = array('*');
             $respuesta = paginar_todo('view_ticketsp', $pagina, $por_pagina, $campos, $filtros);
             $status = 200;
@@ -1939,54 +1944,54 @@ class Soporte extends REST_Controller
     public function asignar_usuario_post()
     {
         $headerToken = apache_request_headers()['Authorization'];
-        
-        if ($this->validarJWT($headerToken)) {
-                
-                $idusuario = $this->leerToken($headerToken)->data->idusuario;
-                $idusuario_asignado = $this->post('idusuario');
-                $comentario = $this->post('comentario');
-                $idticket   = $this->post('idticket');
 
-                $data_ticket = array(
-                    'idestado' => 2,
-                    'idusuario_asignado' => $idusuario_asignado
-                );
-                $this->db->trans_begin();
-                $this->db->set($data_ticket)->where('idticket', $idticket)->update('tickets', $data_ticket);
-                
-                $data_ticket_asignaciones = array(
-                    'idusuario_asignado' => $idusuario_asignado,
-                    'comentario' => $comentario,
-                    'idusuario' => $idusuario,
-                    'idticket' => $idticket
-                );
-                
-                $this->db->insert('tickets_asignaciones', $data_ticket_asignaciones);
-                
-                $data_ticket_estados = array(
+        if ($this->validarJWT($headerToken)) {
+
+            $idusuario = $this->leerToken($headerToken)->data->idusuario;
+            $idusuario_asignado = $this->post('idusuario');
+            $comentario = $this->post('comentario');
+            $idticket = $this->post('idticket');
+
+            $data_ticket = array(
+                'idestado' => 2,
+                'idusuario_asignado' => $idusuario_asignado,
+            );
+            $this->db->trans_begin();
+            $this->db->set($data_ticket)->where('idticket', $idticket)->update('tickets');
+
+            $data_ticket_asignaciones = array(
+                'idusuario_asignado' => $idusuario_asignado,
+                'comentario' => $comentario,
+                'idusuario' => $idusuario,
+                'idticket' => $idticket,
+            );
+
+            $this->db->insert('tickets_asignaciones', $data_ticket_asignaciones);
+
+            $data_ticket_estados = array(
                 'idestado' => 2,
                 'idusuario_asignado' => $idusuario_asignado,
                 'comentario' => $comentario,
                 'idusuario' => $idusuario,
-                'idticket' => $idticket
+                'idticket' => $idticket,
+            );
+
+            $this->db->insert('tickets_estados', $data_ticket_estados);
+
+            if ($this->db->trans_status() === false) {
+                $this->db->trans_rollback();
+                $respuesta = array(
+                    'mensaje' => 'Error en actualizacion.',
                 );
-                
-                $this->db->insert('tickets_estados', $data_ticket_estados);
-                
-                if ($this->db->trans_status() === false) {
-                    $this->db->trans_rollback();
-                    $respuesta = array(
-                        'mensaje' => 'Error en actualizacion.',
-                    );
-                    $status = 409;
-                } else {
-                    $this->db->trans_commit();
-                    $respuesta = array(
-                        'mensaje' => 'Actualizacion correcta',
-                    );
-                    $status = 200;
-                } 
-                
+                $status = 409;
+            } else {
+                $this->db->trans_commit();
+                $respuesta = array(
+                    'mensaje' => 'Actualizacion correcta',
+                );
+                $status = 200;
+            }
+
         } else {
             $respuesta = array(
                 'mensaje' => 'Acceso no autorizado',
@@ -2002,9 +2007,9 @@ class Soporte extends REST_Controller
 
         if ($this->validarJWT($headerToken)) {
             $fromDate = $this->post('fromDate');
-            $fromDate = arrayToDate($fromDate). ' 00:00:00';
+            $fromDate = arrayToDate($fromDate) . ' 00:00:00';
             $toDate = $this->post('toDate');
-            $toDate = arrayToDate($toDate). ' 23:59:59';
+            $toDate = arrayToDate($toDate) . ' 23:59:59';
             $query = $this->db->get_where('servicios', array('activo' => 1));
 
             if ($query && $query->num_rows() >= 1) {
@@ -2014,14 +2019,14 @@ class Soporte extends REST_Controller
                     $this->db->where('fecha_realizado >=', $fromDate);
                     $this->db->where('fecha_realizado <=', $toDate);
                     $total = $this->db->select("COUNT(idticket) as total")->from("view_tickets_finalizado")->where('idservicio', $idservicio)->group_by('idservicio')->get()->row('total');
-                    $row->total = ($total)?$total:0;
+                    $row->total = ($total) ? $total : 0;
                     $row->selected = true;
                 }
                 $respuesta = array(
                     'mensaje' => 'Registro cargado correctamente',
                     'registros' => $datos,
                     $fromDate,
-                    $toDate
+                    $toDate,
                 );
                 $status = 200;
             } else {

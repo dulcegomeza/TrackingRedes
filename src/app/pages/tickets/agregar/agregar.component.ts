@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { AuthService } from '../../../servicios/auth/auth.service';
 import {
   DireccionesService,
   SubdireccionesService,
@@ -33,7 +34,7 @@ export class AgregarComponent implements OnInit {
     idsubdireccion: 0,
     area: 2,
     descripcion: '',
-    medio: '',
+    medio: 'Personal',
     oficio: 'N/A',
     equipo: '',
     idusuario_asignado: 0,
@@ -41,6 +42,8 @@ export class AgregarComponent implements OnInit {
     ip: '',
     mac: ''
   };
+
+  usr: any;
 
   constructor(
     private _direccionesService: DireccionesService,
@@ -50,7 +53,11 @@ export class AgregarComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private _serviciosService: ServiciosService,
+    public _authService: AuthService,
   ) {
+    const payload = this._authService.getPlayLoad();
+    this.usr = payload.data;
+    this.forma.idusuario_asignado = this.usr.idusuario;
     this.route.params.subscribe(parametros => {
       let idticket = parametros['idticket'];
       this.cargarDirecciones();
