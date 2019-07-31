@@ -18,7 +18,7 @@
                 </p>
                 <button type="button" [routerLink]="['agregar']" class="btn btn-primary">Agregar Ticket</button>
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-3" *ngIf="usr.role == 1">
                         <label>Rol: </label>
                         <select [(ngModel)]="filtros.idrol_asignado" (ngModelChange)="cargarUsuarios()"
                             class="form-control-sm custom-select">
@@ -63,21 +63,22 @@
                             <table class="table table-bordered table-sm">
                                 <thead>
                                     <tr>
-                                        <th>TICKET</th>
-                                        <th>FECHA</th>
+                                        <th width="7%">TICKET</th>
+                                        <th width="100px">FECHA</th>
                                         <th>CAPTURO</th>
                                         <th>SOLICITANTE</th>
                                         <th>SECRETARÍA</th>
                                         <th>SUBDIRECCIÓN</th>
-                                        <th>OPCIONES</th>
+                                        <th style="display: table;">OPCIONES</th>
                                     </tr>
                                     <tr>
                                         <th><input [(ngModel)]="filtros.idticket" autocomplete="off"
                                                 (ngModelChange)="filtrar()" name="idticket"
                                                 class="form-control form-control-sm" type="text"></th>
-                                        <th><input [(ngModel)]="filtros.fecha_creacion" autocomplete="off"
+                                        <th>
+                                            <!-- <input [(ngModel)]="filtros.fecha_creacion" autocomplete="off"
                                                 (ngModelChange)="filtrar()" name="fecha_creacion"
-                                                class="form-control form-control-sm" type="text">
+                                                class="form-control form-control-sm" type="text"> -->
                                         </th>
                                         <th><input [(ngModel)]="filtros.capturo" autocomplete="off"
                                                 (ngModelChange)="filtrar()" name="capturo"
@@ -93,7 +94,7 @@
                                 <tbody *ngIf="tickets != null && tickets.length != 0">
                                     <tr *ngFor="let t of tickets" [ngStyle]="{'background-color':t.color}">
                                         <td>{{t.idticket}}</td>
-                                        <td>{{t.fecha_creacion}}</td>
+                                        <td>{{t.fecha_creacion | date}}</td>
                                         <td>
                                             {{t.capturo}}
                                         </td>
@@ -106,7 +107,7 @@
                                         <td>
                                             {{t.subdireccion}}
                                         </td>
-                                        <td width="6%">
+                                        <td class="text-center">
                                             <button type="button" *ngIf="t.idestado != '4' && t.idestado != '6'" class="btn btn-primary btn-sm"
                                                 [routerLink]="['editar', t.idticket]"><i
                                                     class="fa fa-pencil"></i></button>

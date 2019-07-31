@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { UsuariosService, TicketsService, EstadosService } from '../../../servicios/servicio.index';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import swal from 'sweetalert2';
+import { AuthService } from '../../../servicios/auth/auth.service';
 @Component({
   selector: 'app-listado',
   templateUrl: './listado.component.html',
@@ -22,20 +23,20 @@ export class ListadoComponent implements OnInit {
   pageG = 1;
   rpp = 10;
   load = true;
+  usr: any;
 
   filtros: any;
   errMsj = null;
-
-  
-
 
   constructor(
     public _usuariosService: UsuariosService,
     public _estadosService: EstadosService,
     public _ticketsService: TicketsService,
+    public _authService: AuthService,
     private router: Router,
     private route: ActivatedRoute
   ) {
+    const payload = this._authService.getPlayLoad();
     this.filtros = {
       'idticket': '',
       'fecha_creacion': '',
@@ -44,9 +45,14 @@ export class ListadoComponent implements OnInit {
       'secretaria': '',
       'subdireccion': '',
       'idestado': '',
-      'idrol_asignado':'',
+      'idrol_asignado': '',
       'idusuario_asignado': ''
     };
+    this.usr = payload.data;
+    console.log(this.usr);
+    if (this.usr.role == 2) {
+      this.filtros.idusuario_asignado = this.usr.idusuario;
+    }
     this.cargar();
     this.loadPage(1);
   }
@@ -135,6 +141,6 @@ export class ListadoComponent implements OnInit {
         }
       );
 
-     
+
   }
 }
