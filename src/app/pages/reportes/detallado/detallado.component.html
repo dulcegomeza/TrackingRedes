@@ -1,0 +1,137 @@
+<div class="row">
+    <div class="col-12">
+        <div custom-loading [load]="load" class="card">
+            <div class="sk-folding-cube sk-spinner">
+                <div class="sk-cube1 sk-cube"></div>
+                <div class="sk-cube2 sk-cube"></div>
+                <div class="sk-cube4 sk-cube"></div>
+                <div class="sk-cube3 sk-cube"></div>
+            </div>
+            <div class="card-body">
+                <div class="d-flex flex-wrap m-b-30">
+                    <div>
+                        <h3 class="card-title"><span class="lstick"></span>Reporte Detallado</h3>
+                    </div>
+                </div>
+                <p class="alert alert-danger mt-2 text-center" role="alert" *ngIf="errMsj">
+                    {{errMsj}}
+                </p>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>Usuario: </label>
+                        <select [(ngModel)]="filtros.idusuario_asignado" (ngModelChange)="filtrar()"
+                            class="form-control-sm custom-select">
+                            <option value="">TODOS</option>
+                            <option *ngFor="let usuario of usuarios" value="{{usuario.idusuario}}">{{usuario.nombre}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Estado: </label>
+                        <select [(ngModel)]="filtros.idestado" (ngModelChange)="filtrar()"
+                            class="form-control-sm custom-select">
+                            <option value="">TODOS</option>
+                            <option *ngFor="let estado of estados" value="{{estado.idestado}}">{{estado.estado}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="col mb-2 text-right">
+                            Registros por pagina
+                            <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="rpp">
+                                <label ngbButtonLabel class="btn-primary" (click)="loadRpp(10)"> <input ngbButton
+                                        type="radio" [value]="10">
+                                    10 </label>
+                                <label ngbButtonLabel class="btn-primary" (click)="loadRpp(20)"><input ngbButton
+                                        type="radio" [value]="20">
+                                    20</label>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-sm">
+                                <thead>
+                                    <tr>
+                                        <th width="7%">TICKET</th>
+                                        <th width="100px">FECHA</th>
+                                        <th>CAPTURO</th>
+                                        <th>SOLICITANTE</th>
+                                        <th>SECRETARÍA</th>
+                                        <th>SUBDIRECCIÓN</th>
+                                        <th style="display: table;">OPCIONES</th>
+                                    </tr>
+                                    <tr>
+                                        <th><input [(ngModel)]="filtros.idticket" autocomplete="off"
+                                                (ngModelChange)="filtrar()" name="idticket"
+                                                class="form-control form-control-sm" type="text"></th>
+                                        <th>
+                                            <!-- <input [(ngModel)]="filtros.fecha_creacion" autocomplete="off"
+                                                (ngModelChange)="filtrar()" name="fecha_creacion"
+                                                class="form-control form-control-sm" type="text"> -->
+                                        </th>
+                                        <th><input [(ngModel)]="filtros.capturo" autocomplete="off"
+                                                (ngModelChange)="filtrar()" name="capturo"
+                                                class="form-control form-control-sm" type="text">
+                                        </th>
+                                        <th><input [(ngModel)]="filtros.nombre" autocomplete="off"
+                                                (ngModelChange)="filtrar()" name="nombre"
+                                                class="form-control form-control-sm" type="text"></th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngIf="tickets != null && tickets.length != 0">
+                                    <tr *ngFor="let t of tickets" [ngStyle]="{'background-color':t.color}">
+                                        <td>{{t.idticket}}</td>
+                                        <td>{{t.fecha_creacion | date}}</td>
+                                        <td>
+                                            {{t.capturo}}
+                                        </td>
+                                        <td>
+                                            {{t.nombre}}
+                                        </td>
+                                        <td>
+                                            {{t.secretaria}}
+                                        </td>
+                                        <td>
+                                            {{t.subdireccion}}
+                                        </td>
+                                        <td class="text-center">
+                                            <button type="button" *ngIf="t.idestado != '4' && t.idestado != '6'" class="btn btn-primary btn-sm"
+                                                [routerLink]="['editar', t.idticket]"><i
+                                                    class="fa fa-pencil"></i></button>
+                                            <button type="button" class="btn btn-secondary btn-sm"
+                                                [routerLink]="['ver', t.idticket]"><i class="fa fa-eye"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <p class="alert alert-danger mt-2 text-center" role="alert"
+                                *ngIf="tickets == null || tickets.length == 0">
+                                No hay datos
+                            </p>
+                        </div>
+                        <div class="row">
+                            <div class="col left">
+                                <ngb-pagination [collectionSize]="totalItems" [maxSize]="5" [(page)]="pageG"
+                                    [directionLinks]="true" (pageChange)="loadPage($event)" [rotate]="true"
+                                    [ellipses]="false" [boundaryLinks]="true">
+                                </ngb-pagination>
+                            </div>
+                            <div class="col text-right">
+                                Total de registros: {{totalCount}}
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>

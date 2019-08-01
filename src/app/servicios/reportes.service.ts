@@ -19,4 +19,14 @@ export class ReportesService {
         return resp;
       });
   }
+
+  reporteServiciosWord(filtros: any) {
+    let url = URL_SERVICIOS + "/reporte_servicios_word";
+    return this.http
+      .post(url, filtros, { responseType: "blob" })
+      .map((resp: any) => {
+        let downloadUrl = window.URL.createObjectURL(resp);
+        window.open(downloadUrl);
+      });
+  }
 }

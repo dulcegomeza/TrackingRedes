@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ReportesService } from '../../../servicios/reportes.service';
 import { NgbDate, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
+import swal from 'sweetalert2';
 
 @Component({
   selector: "app-servicios",
@@ -24,7 +25,7 @@ export class ServiciosComponent implements OnInit {
     calendar: NgbCalendar
   ) {
     this.fromDate = calendar.getToday();
-    this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
+    this.toDate = calendar.getNext(calendar.getToday(), 'd', 7);
     this.loadData();
   }
 
@@ -54,6 +55,26 @@ export class ServiciosComponent implements OnInit {
         this.selectedServicios.push(s.idservicio);
       }
     });
+    if (this.selectedServicios.length <= 0) {
+      swal.fire("Error", "Seleccione al menos un servicio", "error");
+      return;
+    }
+    const filtros = {
+      fromDate: this.fromDate,
+      toDate: this.toDate,
+      servicios: this.selectedServicios
+    };
+    this._reportesService
+      .reporteServiciosWord(filtros)
+      .subscribe(
+        data => {
+          // this.servicios = data.registros;
+          this.load = false;
+        },
+        err => {
+          this.errMsj = err.error.mensaje;
+        }
+      );
     console.log(this.selectedServicios);
   }
 

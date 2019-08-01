@@ -20,7 +20,7 @@ export class ListadoComponent implements OnInit {
 
   filtros: any;
   errMsj = null;
-  constructor(public _estadosService:EstadosService) {
+  constructor(public _estadosService: EstadosService) {
     this.filtros = { 'estado': '' };
     this.loadPage(1);
   }
@@ -73,7 +73,7 @@ export class ListadoComponent implements OnInit {
 
     }
 
-    swal({
+    swal.fire({
       title: $title,
       text: $text,
       type: "warning",
@@ -102,5 +102,5 @@ export class ListadoComponent implements OnInit {
   }
 
 
-  ngOnInit() {}
+  ngOnInit() { }
 }

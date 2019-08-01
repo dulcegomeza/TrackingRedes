@@ -5,8 +5,10 @@ include APPPATH . '/third_party/jwt/JWT.php';
 include APPPATH . '/third_party/jwt/BeforeValidException.php';
 include APPPATH . '/third_party/jwt/ExpiredException.php';
 include APPPATH . '/third_party/jwt/SignatureInvalidException.php';
+require_once APPPATH . 'vendor/autoload.php';
 
 use Firebase\JWT\JWT;
+use PhpOffice\PhpWord\PhpWord;
 
 class Soporte extends REST_Controller
 {
@@ -16,7 +18,6 @@ class Soporte extends REST_Controller
         parent::__construct();
 
         $this->load->database();
-        $this->load->library('excel');
         $this->load->helper('data_tools');
 
     }
@@ -2044,5 +2045,139 @@ class Soporte extends REST_Controller
             $status = 401;
         }
         $this->response($respuesta, $status);
+    }
+
+    public function reporte_servicios_word_post()
+    {
+        $headerToken = apache_request_headers()['Authorization'];
+
+        if ($this->validarJWT($headerToken)) {
+
+            $fromDate = $this->post('fromDate');
+            $fromDate = arrayToDate($fromDate) . ' 00:00:00';
+            $toDate = $this->post('toDate');
+            $toDate = arrayToDate($toDate) . ' 23:59:59';
+            $servicios = $this->post('servicios');
+            $this->db->where_in('idservicio', $servicios);
+            $query = $this->db->get('servicios');
+
+            if ($query && $query->num_rows() >= 1) {
+                $datos = $query->result();
+
+                $phpWord = new \PhpOffice\PhpWord\PhpWord();
+                $phpWord->getSettings()->setHideGrammaticalErrors(true);
+                $phpWord->getSettings()->setHideSpellingErrors(true);
+                // Adding an empty Section to the document...
+                $section = $phpWord->addSection();
+                // $header = $section->addHeader();
+                $logo_nld = APPPATH . 'wordtemps/logo_nld.png';
+                $bold = array(
+                    'bold' => true,
+                );
+                $font_7 = array(
+                    'size' => 7,
+                );
+                $text_right = array(
+                    'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::RIGHT,
+                );
+                $text_center = array(
+                    'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER,
+                );
+                $header = $section->addHeader();
+                $header->addImage(
+                    $logo_nld,
+                    array(
+                        'width' => 154.8,
+                        'height' => 82.2,
+                        'positioning' => \PhpOffice\PhpWord\Style\Image::POSITION_RELATIVE,
+                        'posHorizontal' => \PhpOffice\PhpWord\Style\Image::POSITION_HORIZONTAL_LEFT,
+                        'posHorizontalRel' => \PhpOffice\PhpWord\Style\Image::POSITION_RELATIVE_TO_COLUMN,
+                        'posVertical' => \PhpOffice\PhpWord\Style\Image::POSITION_VERTICAL_TOP,
+                        'posVerticalRel' => \PhpOffice\PhpWord\Style\Image::POSITION_RELATIVE_TO_LINE,
+                    )
+                );
+                $header->addText("Dirección de Sistemas", [], $text_right);
+                $header->addText("Departamento de SITE y redes", [], $text_right);
+                $header->addText("Informe Semanal", $bold, $text_right);
+                $section->addTextBreak(1);
+                $dia = date("d");
+                $mes = date("m");
+                $meses = ["", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+                $mes = $meses[(int) $mes];
+                $year = date("Y");
+                $section->addText("Nuevo Laredo, Tamaulipas, a $dia de $mes de $year", [], $text_right);
+                $section->addText("Attn. Ing. René Espinosa Perales", $bold);
+                $section->addText("PRESENTE.-", $bold);
+                $section->addTextBreak(1);
+                $section->addText("     Por medio del presente le envió a usted un cordial y afectuoso saludo y aprovecho para hacerle llegar el informe semanal de actividades.");
+
+                // 1. Basic table
+                $fancyTableStyleName = 'Fancy Table';
+                $fancyTableStyle = array('borderSize' => 6, 'borderColor' => '000000', 'cellMargin' => array(
+                    'top' => 500,
+                ));
+                $fancyTableCellStyle = array('valign' => 'center', 'alignment' => \PhpOffice\PhpWord\SimpleType\JcTable::CENTER);
+                $height = array('exactHeight' => true);
+                $phpWord->addTableStyle($fancyTableStyleName, $fancyTableStyle);
+                $table = $section->addTable($fancyTableStyleName);
+
+                foreach ($datos as $row) {
+                    $idservicio = $row->idservicio;
+                    $this->db->where('fecha_realizado >=', $fromDate);
+                    $this->db->where('fecha_realizado <=', $toDate);
+                    $total = $this->db->select("COUNT(idticket) as total")->from("view_tickets_finalizado")->where('idservicio', $idservicio)->group_by('idservicio')->get()->row('total');
+                    $total = ($total) ? $total : 0;
+                    $servicio = $row->servicio;
+                    $table->addRow(300, $height);
+                    $table->addCell(5000)->addText($servicio);
+                    $table->addCell(600)->addText($total, [], $text_center);
+
+                }
+
+                //
+                $section->addTextBreak(1);
+
+                $section->addText("Atentamente", [], $text_center);
+                $section->addText("Ing. Eugenio Martínez Flores", [], $text_center);
+                $section->addText("Dpto. SITE y Redes", $bold, $text_center);
+                $section->addTextBreak(1);
+
+                $section->addText("c.c.p. Archivo", $font_7);
+                $section->addTextBreak(1);
+
+                $footer = $section->addFooter();
+                $footer->addText("Presidencia Municipal", $font_7, $text_center);
+                $footer->addText("Guerrero # 1500, Fraccionamiento Ojo Caliente, C.P. 88040", $font_7, $text_center);
+                $footer->addText("Tel. (867) 711-3500 y 711-3535 sec.particular@nuevolaredo.gob.mx", $font_7, $text_center);
+                $footer->addText("www.nuevolaredo.gob.mx", $font_7, $text_center);
+
+                $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+                header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+                header("Content-Disposition: attachment; filename=myFile.docx");
+                $objWriter->save('php://output');
+
+                $respuesta = array(
+                    'mensaje' => 'Registro cargado correctamente',
+                    'registros' => $datos,
+                    $fromDate,
+                    $toDate,
+                );
+                $status = 200;
+
+            } else {
+                $respuesta = array(
+                    'mensaje' => 'Error interno',
+                    'error' => $this->db->error(),
+                );
+                $status = 500;
+            }
+
+        } else {
+            $respuesta = array(
+                'mensaje' => 'Acceso no autorizado',
+            );
+            $status = 401;
+        }
+        // $this->response($respuesta, $status);
     }
 }

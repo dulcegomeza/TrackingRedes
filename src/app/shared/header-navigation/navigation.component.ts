@@ -14,15 +14,15 @@ declare var $: any;
 })
 export class NavigationComponent implements AfterViewInit {
   name: any = '';
-  playLoad:any;
+  playLoad: any;
   public config: PerfectScrollbarConfigInterface = {};
   jwtHelperService: JwtHelperService = new JwtHelperService();
   constructor(private modalService: NgbModal, private _usuariosService: UsuariosService, private router: Router, _authService: AuthService) {
-    this.playLoad = _authService.getPlayLoad()
+    this.playLoad = _authService.getPlayLoad();
     this.name = this.playLoad.data.nombre;
   }
 
- 
+
 
   salir() {
     this._usuariosService.salir();
@@ -51,50 +51,5 @@ export class NavigationComponent implements AfterViewInit {
     $('body').trigger('resize');
 
 
-  }
-  closeResult: string;
-  formaModal = {
-    primera: 2,
-    segunda: 2,
-    tercera: 2,
-    cuarta: 2,
-    quinta: 2,
-  };
-  openModalColonia(modalcolonia) {
-    this.modalService.open(modalcolonia, { size: 'lg' }).result.then(
-      result => {
-        this.closeResult = `Closed with: ${result}`;
-      },
-      reason => {
-        this.closeResult = `Dismissed ${this.getDismissReasonColonia(
-          reason
-        )}`;
-      }
-    );
-  }
-
-  private getDismissReasonColonia(reason: any) {
-    if (reason == "save") {
-      console.log("save");
-      // this.load = true;
-      // this._coloniasService
-      //   .agregarColonia(this.formaColonia)
-      //   .subscribe(
-      //     data => {
-      //       this.cargarCombos();
-      //       Swal(
-      //         "Colonia agregada correctamente!",
-      //         "",
-      //         "success"
-      //       );
-      //       this.cargarCombos();
-      //     },
-      //     err => {
-      //       this.errMsj = err.error.mensaje;
-
-      //       this.load = false;
-      //     }
-      //   );
-    }
   }
 }
