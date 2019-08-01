@@ -77,7 +77,7 @@ export class ListadoComponent implements OnInit {
 
     }
 
-    swal({
+    swal.fire({
       title: $title,
       text: $text,
       type: "warning",

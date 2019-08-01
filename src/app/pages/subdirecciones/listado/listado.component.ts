@@ -3,10 +3,10 @@ import swal from 'sweetalert2';
 import { SubdireccionesService } from '../../../servicios/servicio.index';
 
 @Component({
-  selector: 'app-listado',
-  templateUrl: './listado.component.html'
+	selector: 'app-listado',
+	templateUrl: './listado.component.html'
 })
-export class ListadoComponent  {
+export class ListadoComponent {
 
 	subdirecciones: any[];
 	itemsPerPage: number;
@@ -18,7 +18,7 @@ export class ListadoComponent  {
 	rpp = 10;
 	load = true;
 	filtros: any;
-	
+
 
 	errMsj = null;
 
@@ -71,41 +71,41 @@ export class ListadoComponent  {
 
 		let $title = 'Activación de Subsecretaria';
 		let $text = '¿Desea activar la Subsecretaria ' + nombre + ' ?';
-	
-		if(val == 0){
+
+		if (val == 0) {
 
 			$title = 'Desactivación de Subsecretaria';
 			$text = '¿Desea desactivar la Subsecretaria ' + nombre + ' ?';
 
 		}
-	
-		swal({
-		  title: $title,
-		  text: $text,
-		  type: "warning",
-		  showCancelButton: true,
-		  confirmButtonText: "SI",
-		  cancelButtonText: "NO",
-		  showLoaderOnConfirm: true,
-		  reverseButtons: true
+
+		swal.fire({
+			title: $title,
+			text: $text,
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonText: "SI",
+			cancelButtonText: "NO",
+			showLoaderOnConfirm: true,
+			reverseButtons: true
 		}).then(result => {
-		  if (result.value) {
-	
-			this._subdireccionesService.cambiarEstado(idsubdireccion, val).subscribe(
-			  data => {
-				this.load = false;
-				this.loadData();
-			  },
-			  err => {
-				this.errMsj = err.error.mensaje;
-				this.load = false;
-			  }
-			);
-			
-		  }
+			if (result.value) {
+
+				this._subdireccionesService.cambiarEstado(idsubdireccion, val).subscribe(
+					data => {
+						this.load = false;
+						this.loadData();
+					},
+					err => {
+						this.errMsj = err.error.mensaje;
+						this.load = false;
+					}
+				);
+
+			}
 		});
 
-}
+	}
 
 }
 

@@ -7,9 +7,14 @@ import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SharedModule } from "../../shared/shared.module.ts";
 import { ReportesRoutingModule } from './reportes.routing';
+import { DetalladoComponent } from './detallado/detallado.component';
 
 @NgModule({
-  declarations: [ServiciosComponent, ListadoComponent],
+  declarations: [
+    ServiciosComponent,
+    ListadoComponent,
+    DetalladoComponent
+  ],
   imports: [
     CommonModule,
     NgbModule,

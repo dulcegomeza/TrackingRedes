@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import swal from 'sweetalert2';
-import { ServiciosService} from '../../../servicios/servicio.index';
+import { ServiciosService } from '../../../servicios/servicio.index';
 
 
 @Component({
@@ -22,7 +22,7 @@ export class ListadoComponent implements OnInit {
 	errMsj = null;
 
 	constructor(public _serviciosService: ServiciosService) {
-		this.filtros = { servicio: '',  activo: '' };
+		this.filtros = { servicio: '', activo: '' };
 		this.loadPage(1);
 	}
 
@@ -53,12 +53,12 @@ export class ListadoComponent implements OnInit {
 	cambiarEstado(idservicio, val, servicio) {
 		let title = 'Activación de servicio';
 		let text = '¿Desea activar al servicio ' + servicio + ' ?';
-		if(val == 0){
+		if (val == 0) {
 			title = 'Desactivación de servicio';
 			text = '¿Desea desactivar al servicio ' + servicio + ' ?';
 		}
-	
-		swal({
+
+		swal.fire({
 			title: title,
 			text: text,
 			type: "warning",
@@ -69,39 +69,39 @@ export class ListadoComponent implements OnInit {
 			reverseButtons: true
 		}).then(result => {
 			if (result.value) {
-			this._serviciosService.cambiarEstado(idservicio, val).subscribe(
-				data => {
-				this.load = false;
-				this.loadData();
-				},
-				err => {
-				this.errMsj = err.error.mensaje;
-				this.load = false;
-				}
-			);
-			
+				this._serviciosService.cambiarEstado(idservicio, val).subscribe(
+					data => {
+						this.load = false;
+						this.loadData();
+					},
+					err => {
+						this.errMsj = err.error.mensaje;
+						this.load = false;
+					}
+				);
+
 			}
 		});
-}
+	}
 
-loadData() {
-	this.load = true;
-	this._serviciosService
-    .getServiciosPaginado(this.pageG, this.rpp, this.filtros)
-    .subscribe(
-    	data => {
-        this.totalItems = data.total_paginas * 10;
-        this.servicios = data.registros;
-        this.totalCount = data.cuantos;
-        this.load = false;
-    	},
-    	err => {
-        this.servicios = null;
-        this.errMsj = err.error.mensaje;
-        this.totalCount = 0;
-        this.load = false;
-    	}
-    );
-}
+	loadData() {
+		this.load = true;
+		this._serviciosService
+			.getServiciosPaginado(this.pageG, this.rpp, this.filtros)
+			.subscribe(
+				data => {
+					this.totalItems = data.total_paginas * 10;
+					this.servicios = data.registros;
+					this.totalCount = data.cuantos;
+					this.load = false;
+				},
+				err => {
+					this.servicios = null;
+					this.errMsj = err.error.mensaje;
+					this.totalCount = 0;
+					this.load = false;
+				}
+			);
+	}
 
 }

@@ -22,7 +22,7 @@ export class ListadoComponent implements OnInit {
   errMsj = null;
   constructor(public _secretariasService: SecretariasService) {
 
-    this.filtros = { 'clave':'', 'secretaria': '' };
+    this.filtros = { 'clave': '', 'secretaria': '' };
     this.loadPage(1);
   }
 
@@ -76,7 +76,7 @@ export class ListadoComponent implements OnInit {
 
     }
 
-    swal({
+    swal.fire({
       title: $title,
       text: $text,
       type: "warning",
@@ -104,5 +104,5 @@ export class ListadoComponent implements OnInit {
 
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 }
