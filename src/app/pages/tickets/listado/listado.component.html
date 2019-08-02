@@ -17,6 +17,13 @@
                     {{errMsj}}
                 </p>
                 <button type="button" [routerLink]="['agregar']" class="btn btn-primary">Agregar Ticket</button>
+                <div class="col text-right" *ngIf="totalpendientes > 0">
+                        PENDIENTES
+                        <span class="label label-warning ng-binding">
+                        {{totalpendientes}}
+                        </span>
+                    
+                </div>
                 <div class="row">
                     <div class="col-md-3" *ngIf="usr.role == 1">
                         <label>Rol: </label>
