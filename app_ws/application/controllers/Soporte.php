@@ -2180,4 +2180,27 @@ class Soporte extends REST_Controller
         }
         // $this->response($respuesta, $status);
     }
+
+    public function reporte_detalladop_post()
+    {
+        $headerToken = apache_request_headers()['Authorization'];
+
+        if ($this->validarJWT($headerToken)) {
+            $this->load->helper('paginacion');
+            $pagina = $this->post('pagina');
+            $por_pagina = $this->post('por_pagina');
+            $filtros = $this->post('filtros');
+            $filtros = (array) $filtros;
+            $campos = array('*');
+            $respuesta = paginar_todo('view_reporte_detallado', $pagina, $por_pagina, $campos, $filtros);
+            $status = 200;
+        } else {
+            $respuesta = array(
+                'mensaje' => 'Acceso no autorizado',
+            );
+            $status = 401;
+        }
+        $this->response($respuesta, $status);
+    }
+
 }
