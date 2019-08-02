@@ -1375,13 +1375,16 @@ class Soporte extends REST_Controller
             $por_pagina = $this->post('por_pagina');
             $filtros = $this->post('filtros');
             $filtros = (array) $filtros;
-            // $idrol = $this->leerToken($headerToken)->data->role;
-            // $idusuario = $this->leerToken($headerToken)->data->idusuario;
-            // if($idrol == 2){
-            //     $filtros['idusuario_asignado'] = $idusuario;
-            // }
+            $idrol = $this->leerToken($headerToken)->data->role;
+            $idusuario = $this->leerToken($headerToken)->data->idusuario;
             $campos = array('*');
             $respuesta = paginar_todo('view_ticketsp', $pagina, $por_pagina, $campos, $filtros);
+            $this->db->where_in('idestado', [1, 2]);
+            if ($idrol == 2) {
+                $this->db->where('idusuario_asignado', $idusuario);
+            }
+            $pend = $this->db->select('idticket')->from('tickets')->count_all_results();
+            $respuesta["pendientes"] = $pend;
             $status = 200;
         } else {
             $respuesta = array(

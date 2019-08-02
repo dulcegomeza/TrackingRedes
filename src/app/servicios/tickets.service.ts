@@ -20,10 +20,10 @@ export class TicketsService {
     private _jsonp: Jsonp
   ) { }
 
-  getTicketsPaginado(pagina: number, cantidad: number, filtros: any) {
+  getTicketsPaginado(pagina: number, cantidad: number, filtros: any, pendientes: number) {
     let url = URL_SERVICIOS + '/ticketsp';
     return this.http
-      .post(url, { pagina, por_pagina: cantidad, filtros })
+      .post(url, { pagina, por_pagina: cantidad, filtros, pendientes })
       .map((resp: any) => {
         return resp;
       });

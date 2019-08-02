@@ -19,11 +19,13 @@ export class ListadoComponent implements OnInit {
   totalItems: any;
   page: any;
   totalCount: number;
+  totalpendientes: number;
   previousPage: any;
   pageG = 1;
   rpp = 10;
   load = true;
   usr: any;
+  pendientes: number;
 
   filtros: any;
   errMsj = null;
@@ -81,21 +83,20 @@ export class ListadoComponent implements OnInit {
   loadData() {
     this.load = false;
     this._ticketsService
-      .getTicketsPaginado(this.pageG, this.rpp, this.filtros)
+      .getTicketsPaginado(this.pageG, this.rpp, this.filtros, this.pendientes)
       .subscribe(
         data => {
           this.totalItems = data.total_paginas * 10;
           this.tickets = data.registros;
           this.totalCount = data.cuantos;
           this.load = false;
+          this.totalpendientes = data.pendientes;
         },
         err => {
           this.errMsj = err.error.mensaje;
         }
       );
   }
-
-
 
   cargar() {
     this.load = true;
@@ -113,7 +114,7 @@ export class ListadoComponent implements OnInit {
         this.load = false;
       },
       err => {
-        swal.fire({
+        swal({
           type: 'error',
           title: 'Contacte al administrador',
           text: 'No se pudo cargar la informacion.'
