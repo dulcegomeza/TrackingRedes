@@ -54,32 +54,18 @@
                             <table class="table table-bordered table-sm">
                                 <thead>
                                     <tr>
-                                        <th width="7%">TICKET</th>
+                                        <th width="7%">#</th>
                                         <th width="100px">FECHA</th>
-                                        <th>CAPTURO</th>
-                                        <th>SOLICITANTE</th>
                                         <th>SECRETARÍA</th>
                                         <th>SUBDIRECCIÓN</th>
-                                        <th style="display: table;">OPCIONES</th>
+                                        <th>SOLICITANTE</th>
+                                        <th>DESCRIPCIÓN</th>
+                                        <th>ASIGNADO</th>
+                                        <th>EQUIPO</th>
+                                        <th>IP</th>
+                                        <th>MAC</th>
                                     </tr>
                                     <tr>
-                                        <th><input [(ngModel)]="filtros.idticket" autocomplete="off"
-                                                (ngModelChange)="filtrar()" name="idticket"
-                                                class="form-control form-control-sm" type="text"></th>
-                                        <th>
-                                            <!-- <input [(ngModel)]="filtros.fecha_creacion" autocomplete="off"
-                                                (ngModelChange)="filtrar()" name="fecha_creacion"
-                                                class="form-control form-control-sm" type="text"> -->
-                                        </th>
-                                        <th><input [(ngModel)]="filtros.capturo" autocomplete="off"
-                                                (ngModelChange)="filtrar()" name="capturo"
-                                                class="form-control form-control-sm" type="text">
-                                        </th>
-                                        <th><input [(ngModel)]="filtros.nombre" autocomplete="off"
-                                                (ngModelChange)="filtrar()" name="nombre"
-                                                class="form-control form-control-sm" type="text"></th>
-                                        <th></th>
-                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody *ngIf="tickets != null && tickets.length != 0">
@@ -87,24 +73,28 @@
                                         <td>{{t.idticket}}</td>
                                         <td>{{t.fecha_creacion | date}}</td>
                                         <td>
-                                            {{t.capturo}}
-                                        </td>
-                                        <td>
-                                            {{t.nombre}}
-                                        </td>
-                                        <td>
                                             {{t.secretaria}}
                                         </td>
                                         <td>
                                             {{t.subdireccion}}
                                         </td>
-                                        <td class="text-center">
-                                            <button type="button" *ngIf="t.idestado != '4' && t.idestado != '6'" class="btn btn-primary btn-sm"
-                                                [routerLink]="['editar', t.idticket]"><i
-                                                    class="fa fa-pencil"></i></button>
-                                            <button type="button" class="btn btn-secondary btn-sm"
-                                                [routerLink]="['ver', t.idticket]"><i class="fa fa-eye"></i>
-                                            </button>
+                                        <td>
+                                            {{t.solicitante}}
+                                        </td>
+                                        <td>
+                                            {{t.descripcion}}
+                                        </td>
+                                        <td>
+                                            {{t.asignado}}
+                                        </td>
+                                        <td>
+                                            {{t.equipo}}
+                                        </td>
+                                        <td>
+                                            {{t.ip}}
+                                        </td>
+                                        <td>
+                                            {{t.mac}}
                                         </td>
                                     </tr>
                                 </tbody>

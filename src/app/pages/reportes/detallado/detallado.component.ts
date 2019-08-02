@@ -39,14 +39,17 @@ export class DetalladoComponent implements OnInit {
     const payload = this._authService.getPlayLoad();
     this.filtros = {
       'idticket': '',
+      'idestado': '',
+      'idusuario_asignado': '',
       'fecha_creacion': '',
-      'capturo': '',
-      'nombre': '',
       'secretaria': '',
       'subdireccion': '',
-      'idestado': '',
-      'idrol_asignado': '',
-      'idusuario_asignado': ''
+      'solicitante': '',
+      'descripcion': '',
+      'asignado': '',
+      'equipo': '',
+      'ip': '',
+      'mac': ''
     };
     this.usr = payload.data;
     console.log(this.usr);
@@ -81,7 +84,7 @@ export class DetalladoComponent implements OnInit {
   loadData() {
     this.load = false;
     this._ticketsService
-      .getTicketsPaginado(this.pageG, this.rpp, this.filtros)
+      .getReporteDetalladoPaginado(this.pageG, this.rpp, this.filtros)
       .subscribe(
         data => {
           this.totalItems = data.total_paginas * 10;

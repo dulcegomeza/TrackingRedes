@@ -1,6 +1,6 @@
 <?php
 
-function paginar_todo($tabla, $pagina, $por_pagina, $campos, $filtros)
+function paginar_todo($tabla, $pagina, $por_pagina, $campos, $filtros, $where = null)
 {
 
     $CI = &get_instance();
@@ -14,7 +14,19 @@ function paginar_todo($tabla, $pagina, $por_pagina, $campos, $filtros)
         $pagina = 1;
     }
 
-    $cuantos = $CI->db->count_all($tabla);
+    if (isset($where)) {
+
+        $CI->db->where($where);
+    }
+
+    $CI->db->like($filtros, 'match', 'after');
+    $CI->db->from($tabla);
+    $cuantos = $CI->db->count_all_results();
+
+    if (isset($where)) {
+        $CI->db->where($where);
+    }
+
     $total_paginas = ceil($cuantos / $por_pagina);
 
     if ($pagina > $total_paginas) {
@@ -23,6 +35,9 @@ function paginar_todo($tabla, $pagina, $por_pagina, $campos, $filtros)
 
     $pagina -= 1;
     $desde = $pagina * $por_pagina;
+    if ($desde < 0) {
+        $desde = 0;
+    }
 
     if ($pagina >= $total_paginas - 1) {
         $pagina_siguiente = 1;
@@ -35,6 +50,7 @@ function paginar_todo($tabla, $pagina, $por_pagina, $campos, $filtros)
     } else {
         $pagina_anterio = $pagina;
     }
+
     $CI->db->select($campos);
     $CI->db->like($filtros, 'match', 'after');
     $query = $CI->db->get($tabla, $por_pagina, $desde);
@@ -46,11 +62,11 @@ function paginar_todo($tabla, $pagina, $por_pagina, $campos, $filtros)
         'pag_siguiente' => $pagina_siguiente,
         'pag_anterior' => $pagina_anterio,
         'registros' => $query->result(),
-    );
+        'where' => $where,
+        'filtros' => $filtros);
 
     return $respuesta;
 }
-
 
 function paginar_todo_fechas($tabla, $pagina, $por_pagina, $campos, $filtros, $order, $fechas, $fecha_campo)
 {
@@ -67,11 +83,10 @@ function paginar_todo_fechas($tabla, $pagina, $por_pagina, $campos, $filtros, $o
     }
 
     if (isset($fechas)) {
-    $fechaInicio = $fechas['fechaInicio'];
-    $fechaFin = $fechas['fechaFin'];
-    $CI->db->where($fecha_campo . " BETWEEN '$fechaInicio' AND '$fechaFin'");
+        $fechaInicio = $fechas['fechaInicio'];
+        $fechaFin = $fechas['fechaFin'];
+        $CI->db->where($fecha_campo . " BETWEEN '$fechaInicio' AND '$fechaFin'");
     }
-
 
     $CI->db->like($filtros, 'match', 'after');
     $CI->db->from($tabla);
@@ -98,11 +113,10 @@ function paginar_todo_fechas($tabla, $pagina, $por_pagina, $campos, $filtros, $o
     }
 
     if (isset($fechas)) {
-    $fechaInicio = $fechas['fechaInicio'];
-    $fechaFin = $fechas['fechaFin'];
-    $CI->db->where($fecha_campo . " BETWEEN '$fechaInicio' AND '$fechaFin'");
-}
-
+        $fechaInicio = $fechas['fechaInicio'];
+        $fechaFin = $fechas['fechaFin'];
+        $CI->db->where($fecha_campo . " BETWEEN '$fechaInicio' AND '$fechaFin'");
+    }
 
     $CI->db->select($campos);
     $CI->db->like($filtros, 'match', 'after');
@@ -111,17 +125,16 @@ function paginar_todo_fechas($tabla, $pagina, $por_pagina, $campos, $filtros, $o
     $fechaInicio = $fechas['fechaInicio'];
     $fechaFin = $fechas['fechaFin'];
 
-
     if ($query && $query->num_rows() >= 1) {
 
-    $respuesta = array(
-        'cuantos' => $cuantos,
-        'total_paginas' => $total_paginas,
-        'pagina_actual' => ($pagina + 1),
-        'pag_siguiente' => $pagina_siguiente,
-        'pag_anterior' => $pagina_anterio,
-        'registros' => $query->result(),
-    );
+        $respuesta = array(
+            'cuantos' => $cuantos,
+            'total_paginas' => $total_paginas,
+            'pagina_actual' => ($pagina + 1),
+            'pag_siguiente' => $pagina_siguiente,
+            'pag_anterior' => $pagina_anterio,
+            'registros' => $query->result(),
+        );
 
     } else {
         $respuesta = array(
