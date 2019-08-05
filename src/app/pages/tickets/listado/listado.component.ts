@@ -114,7 +114,7 @@ export class ListadoComponent implements OnInit {
         this.load = false;
       },
       err => {
-        swal({
+        swal.fire({
           type: 'error',
           title: 'Contacte al administrador',
           text: 'No se pudo cargar la informacion.'
