@@ -6,6 +6,7 @@ import { forkJoin } from 'rxjs/observable/forkJoin';
 import swal from 'sweetalert2';
 import { AuthService } from '../../../servicios/auth/auth.service';
 import { ReportesService } from '../../../servicios/reportes.service';
+import { TicketsService } from '../../../servicios/tickets.service';
 @Component({
   selector: 'app-detallado',
   templateUrl: './detallado.component.html',
@@ -13,6 +14,11 @@ import { ReportesService } from '../../../servicios/reportes.service';
 })
 export class DetalladoComponent implements OnInit {
   tickets: any[];
+  fecha = false;
+  fechas = {
+    fechaInicio: "",
+    fechaFin: ""
+  };
   roles: any;
   estados: any;
   usuarios: any;
@@ -33,6 +39,7 @@ export class DetalladoComponent implements OnInit {
     public _usuariosService: UsuariosService,
     public _estadosService: EstadosService,
     public _reportesService: ReportesService,
+    public _ticketsService: TicketsService,
     public _authService: AuthService,
     private router: Router,
     private route: ActivatedRoute
@@ -42,7 +49,6 @@ export class DetalladoComponent implements OnInit {
       'idticket': '',
       'idestado': '',
       'idusuario_asignado': '',
-      'fecha_creacion': '',
       'secretaria': '',
       'subdireccion': '',
       'solicitante': '',
@@ -84,8 +90,13 @@ export class DetalladoComponent implements OnInit {
 
   loadData() {
     this.load = false;
-    this._reportesService
-      .getReporteDetalladoPaginado(this.pageG, this.rpp, this.filtros)
+    let fechas = this.fechas;
+    if (!this.fecha) {
+      fechas = null;
+    }
+
+    this._ticketsService
+      .getReporteDetalladoPaginado(this.pageG, this.rpp, this.filtros, fechas)
       .subscribe(
         data => {
           this.totalItems = data.total_paginas * 10;
@@ -99,7 +110,16 @@ export class DetalladoComponent implements OnInit {
       );
   }
 
+  fechas_evaluacion() {
 
+
+    if (this.fechas.fechaInicio == "" || this.fechas.fechaFin == "") {
+      return true;
+    } else {
+      return false;
+    }
+
+  }
 
   cargar() {
     this.load = true;
@@ -146,5 +166,19 @@ export class DetalladoComponent implements OnInit {
       );
 
 
+  }
+
+  excel() {
+    let fechas = this.fechas;
+    if (!this.fecha) {
+      fechas = null;
+    }
+    let data = {
+      fechas: fechas,
+      filtros: this.filtros
+    };
+    this._ticketsService
+      .getReporteDetalladoExcel(data)
+      .subscribe();
   }
 }

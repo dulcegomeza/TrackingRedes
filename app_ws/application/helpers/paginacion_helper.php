@@ -68,7 +68,7 @@ function paginar_todo($tabla, $pagina, $por_pagina, $campos, $filtros, $where = 
     return $respuesta;
 }
 
-function paginar_todo_fechas($tabla, $pagina, $por_pagina, $campos, $filtros, $order, $fechas, $fecha_campo)
+function paginar_todo_fechas($tabla, $pagina, $por_pagina, $campos, $filtros, $fechas, $fecha_campo)
 {
 
     $CI = &get_instance();
@@ -99,6 +99,9 @@ function paginar_todo_fechas($tabla, $pagina, $por_pagina, $campos, $filtros, $o
 
     $pagina -= 1;
     $desde = $pagina * $por_pagina;
+    if($desde < 0){
+        $desde = 0;
+    }
 
     if ($pagina >= $total_paginas - 1) {
         $pagina_siguiente = 1;
@@ -120,7 +123,7 @@ function paginar_todo_fechas($tabla, $pagina, $por_pagina, $campos, $filtros, $o
 
     $CI->db->select($campos);
     $CI->db->like($filtros, 'match', 'after');
-    $CI->db->order_by($order[0], $order[1]);
+    // $CI->db->order_by($order[0], $order[1]);
     $query = $CI->db->get($tabla, $por_pagina, $desde);
     $fechaInicio = $fechas['fechaInicio'];
     $fechaFin = $fechas['fechaFin'];

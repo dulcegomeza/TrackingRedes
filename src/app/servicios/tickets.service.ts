@@ -29,6 +29,16 @@ export class TicketsService {
       });
   }
 
+  getReporteDetalladoPaginado(pagina: number, cantidad: number, filtros: any, fechas: any) {
+    let url = URL_SERVICIOS + '/reporte_detalladop';
+    return this.http
+      .post(url, { pagina, por_pagina: cantidad, filtros, fechas })
+      .map((resp: any) => {
+        return resp;
+      });
+  }
+
+
   getTicket(idticket: string) {
     let url = URL_SERVICIOS + `/ticket/${idticket}`;
     return this.http.get(url).map((resp: any) => {
@@ -76,6 +86,17 @@ export class TicketsService {
     return this.http.post(url, ticket).map((resp: any) => {
     return resp;
     });
+  }
+
+  getReporteDetalladoExcel(datos: any) {
+    // tslint:disable-next-line:prefer-const
+    let url = URL_SERVICIOS + "/reporte_detallado_excel";
+    return this.http
+      .post(url, datos, { responseType: "blob" })
+      .map((resp: any) => {
+        let downloadUrl = window.URL.createObjectURL(resp);
+        window.open(downloadUrl);
+      });
   }
 
 }

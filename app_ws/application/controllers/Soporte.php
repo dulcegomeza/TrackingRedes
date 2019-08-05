@@ -2193,13 +2193,22 @@ class Soporte extends REST_Controller
         $headerToken = apache_request_headers()['Authorization'];
 
         if ($this->validarJWT($headerToken)) {
+
+            $fechas = $this->post('fechas');
+
+            if ($fechas) {
+$fechas["fechaInicio"] = arrayToDate($fechas["fechaInicio"]) . " 00:00:00";
+$fechas["fechaFin"] = arrayToDate($fechas["fechaFin"]) . " 23:59:59";
+            }
+
+
             $this->load->helper('paginacion');
             $pagina = $this->post('pagina');
             $por_pagina = $this->post('por_pagina');
             $filtros = $this->post('filtros');
             $filtros = (array) $filtros;
             $campos = array('*');
-            $respuesta = paginar_todo('view_reporte_detallado', $pagina, $por_pagina, $campos, $filtros);
+            $respuesta = paginar_todo_fechas('view_reporte_detallado', $pagina, $por_pagina, $campos, $filtros, $fechas, 'fecha_creacion');
             $status = 200;
         } else {
             $respuesta = array(
@@ -2208,6 +2217,12 @@ class Soporte extends REST_Controller
             $status = 401;
         }
         $this->response($respuesta, $status);
+    }
+
+    public function reporte_detallado_excel_post()
+    {
+        $this->load->helper('reporte_detallado_excel');
+        reporte_detallado_excel($this->post());
     }
 
 }
