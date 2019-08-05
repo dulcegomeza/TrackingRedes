@@ -29,4 +29,13 @@ export class ReportesService {
         window.open(downloadUrl);
       });
   }
+
+  getReporteDetalladoPaginado(pagina: number, cantidad: number, filtros: any) {
+    let url = URL_SERVICIOS + '/reporte_detalladop';
+    return this.http
+      .post(url, { pagina, por_pagina: cantidad, filtros })
+      .map((resp: any) => {
+        return resp;
+      });
+  }
 }

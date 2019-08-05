@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { UsuariosService, TicketsService, EstadosService } from '../../../servicios/servicio.index';
+import { UsuariosService, EstadosService } from '../../../servicios/servicio.index';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import swal from 'sweetalert2';
 import { AuthService } from '../../../servicios/auth/auth.service';
+import { ReportesService } from '../../../servicios/reportes.service';
 @Component({
   selector: 'app-detallado',
   templateUrl: './detallado.component.html',
@@ -31,7 +32,7 @@ export class DetalladoComponent implements OnInit {
   constructor(
     public _usuariosService: UsuariosService,
     public _estadosService: EstadosService,
-    public _ticketsService: TicketsService,
+    public _reportesService: ReportesService,
     public _authService: AuthService,
     private router: Router,
     private route: ActivatedRoute
@@ -83,7 +84,7 @@ export class DetalladoComponent implements OnInit {
 
   loadData() {
     this.load = false;
-    this._ticketsService
+    this._reportesService
       .getReporteDetalladoPaginado(this.pageG, this.rpp, this.filtros)
       .subscribe(
         data => {
