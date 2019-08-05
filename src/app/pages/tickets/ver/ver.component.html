@@ -176,7 +176,10 @@
                         <ngb-tab>
                             <ng-template ngbTabTitle><i class="fa fa-comments"></i> Comentarios</ng-template>
                             <ng-template ngbTabContent>
-                                <div class="table-responsive">
+                                <div class="alert alert-warning" *ngIf="ticket.comentarios.length==0">
+                                    <i class="fa fa-warning"></i> No hay ningun comentario.
+                                </div>
+                                <div class="table-responsive" *ngIf="ticket.comentarios.length > 0">
                                     <table class="table table-bordered">
                                         <thead>
                                             <th>Fecha</th>
@@ -224,22 +227,14 @@
                             <ng-template ngbTabTitle><i class="fa fa-users"></i> Asignaciones</ng-template>
                             <ng-template ngbTabContent>
                                 <div class="profiletimeline">
-                                    <div class="sl-item">
+                                    <div class="sl-item" *ngFor="let ta of ticket.asignaciones">
                                         <div class="sl-right">
                                             <div>
-                                                <p>John Doe assign ddd</p>
-                                                <span class="sl-date">5 minutes ago</span>
-                                                <p>assign a new task</p>
-                                            </div>
-                                        </div>
-                                        <hr>                                    
-                                    </div>
-                                    <div class="sl-item">
-                                        <div class="sl-right">
-                                            <div>
-                                                <p>John Doe assign ddd</p>
-                                                <span class="sl-date">5 minutes ago</span>
-                                                <p>assign a new task</p>
+                                                <p>
+                                                    <span class="font-weight-bold">{{ta.asigno}}</span> asigno a <span class="font-weight-bold">{{ta.asignado}}</span>
+                                                </p>
+                                                <span class="sl-date">{{ta.tiempo}} - {{ta.fecha_creacion | date:'medium'}}</span>
+                                                <p>{{ta.comentario}}</p>
                                             </div>
                                         </div>
                                         <hr>                                    
