@@ -1444,7 +1444,7 @@ class Soporte extends REST_Controller
                 'idticket' => $idticket,
                 'idusuario' => $idusuario,
                 'idusuario_asignado' => $idusuario_asignado,
-                'comentario' => '',
+                'comentario' => 'Comienzo',
             );
 
             $this->db->insert('tickets_asignaciones', $data_asignacion);
@@ -1454,7 +1454,7 @@ class Soporte extends REST_Controller
                 'idusuario' => $idusuario,
                 'idusuario_asignado' => $idusuario_asignado,
                 'idestado' => 1,
-                'comentario' => '',
+                'comentario' => 'Comienzo',
             );
 
             $this->db->insert('tickets_estados', $data_estado);
@@ -1608,8 +1608,12 @@ class Soporte extends REST_Controller
                 $comentarios = $this->db->select("fecha, comentario, usuario")->from("view_tickets_comentarios")->where('idticket', $idticket)->order_by('idcomentario', 'DESC')->get()->result();
                 $datos->comentarios = $comentarios;
                 $testados = $this->db->select("fecha, estado, color, comentario, usuario, asignado")->from("view_tickets_estados")->where('idticket', $idticket)->order_by('idticketestado', 'DESC')->get()->result();
-                $datos->comentarios = $comentarios;
                 $datos->testados = $testados;
+                $asignaciones = $this->db->select("*")->from("view_tickets_asignaciones")->where('idticket', $idticket)->get()->result();
+                foreach($asignaciones as $asign){
+                    $asign->tiempo = tiempo($asign->fecha_creacion);
+                }
+                $datos->asignaciones = $asignaciones;
                 $respuesta = array(
                     'mensaje' => 'Registro cargado correctamente',
                     'registro' => $datos,

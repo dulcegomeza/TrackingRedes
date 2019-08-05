@@ -38,6 +38,7 @@ export class TicketsService {
       });
   }
 
+
   getTicket(idticket: string) {
     let url = URL_SERVICIOS + `/ticket/${idticket}`;
     return this.http.get(url).map((resp: any) => {

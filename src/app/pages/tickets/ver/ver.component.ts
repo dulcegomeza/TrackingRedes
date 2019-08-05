@@ -49,6 +49,7 @@ export class VerComponent {
     telefono: "",
     comentarios: [],
     testados: [],
+    asignaciones: [],
   };
 
   padding = "5px";
