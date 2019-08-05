@@ -16,25 +16,50 @@
                 <p class="alert alert-danger mt-2 text-center" role="alert" *ngIf="errMsj">
                     {{errMsj}}
                 </p>
-                <div class="row">
-                    <div class="col-md-3">
+                <div class="row mb-5">
+                    <div class="col-md-4">
                         <label>Usuario: </label>
-                        <select [(ngModel)]="filtros.idusuario_asignado" (ngModelChange)="filtrar()"
-                            class="form-control-sm custom-select">
+                        <select [(ngModel)]="filtros.idusuario_asignado" (ngModelChange)="filtrar()" class="form-control-sm custom-select">
                             <option value="">TODOS</option>
                             <option *ngFor="let usuario of usuarios" value="{{usuario.idusuario}}">{{usuario.nombre}}
                             </option>
                         </select>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <label>Estado: </label>
-                        <select [(ngModel)]="filtros.idestado" (ngModelChange)="filtrar()"
-                            class="form-control-sm custom-select">
+                        <select [(ngModel)]="filtros.idestado" (ngModelChange)="filtrar()" class="form-control-sm custom-select">
                             <option value="">TODOS</option>
                             <option *ngFor="let estado of estados" value="{{estado.idestado}}">{{estado.estado}}
                             </option>
                         </select>
                     </div>
+                    <div class="col-md-4 float-right">
+                        <button class="btn btn-primary" style="height: 38px; margin-top: 32px; margin-right: 5px; " (click)="excel()"><i class="fa fa-file-excel-o"></i> Descargar</button>
+                        <button class="btn btn-primary" style="height: 38px; margin-top: 32px;" (click)="fecha = !fecha" *ngIf="fecha"> Filtrar por fecha</button>
+                        <button class="btn btn-outline-primary" style="height: 38px; margin-top: 32px;" (click)="fecha = !fecha" *ngIf="!fecha"> Filtrar por fecha</button>
+                    </div>
+                    <div class="col-md-3 mt-3" *ngIf="fecha">
+                        <label>Fecha Inicio: </label>
+                        <div class="input-group">
+                            <input class="form-control" placeholder="yyyy-mm-dd" name="fechaInicio" [(ngModel)]="fechas.fechaInicio" ngbDatepicker #d="ngbDatepicker">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button" style="height: 38px;"><i class="fa fa-calendar"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mt-3" *ngIf="fecha">
+                        <label>Fecha Final: </label>
+                        <div class="input-group">
+                            <input class="form-control" placeholder="yyyy-mm-dd" name="fechaFin" [(ngModel)]="fechas.fechaFin" ngbDatepicker #d="ngbDatepicker">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary " (click)="d.toggle()" type="button" style="height: 38px;"><i class="fa fa-calendar"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 ">
+                        <button class="btn btn-primary" style="height: 38px; margin-top: 48px;" (click)="filtrar()" *ngIf="fecha" [disabled]="fechas_evaluacion()"><i class="fa fa-search"></i> Filtrar </button>
+                    </div>
+
                 </div>
 
                 <div class="row">
@@ -99,16 +124,13 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <p class="alert alert-danger mt-2 text-center" role="alert"
-                                *ngIf="tickets == null || tickets.length == 0">
+                            <p class="alert alert-danger mt-2 text-center" role="alert" *ngIf="tickets == null || tickets.length == 0">
                                 No hay datos
                             </p>
                         </div>
                         <div class="row">
                             <div class="col left">
-                                <ngb-pagination [collectionSize]="totalItems" [maxSize]="5" [(page)]="pageG"
-                                    [directionLinks]="true" (pageChange)="loadPage($event)" [rotate]="true"
-                                    [ellipses]="false" [boundaryLinks]="true">
+                                <ngb-pagination [collectionSize]="totalItems" [maxSize]="5" [(page)]="pageG" [directionLinks]="true" (pageChange)="loadPage($event)" [rotate]="true" [ellipses]="false" [boundaryLinks]="true">
                                 </ngb-pagination>
                             </div>
                             <div class="col text-right">

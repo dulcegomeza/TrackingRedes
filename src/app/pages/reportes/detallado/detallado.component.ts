@@ -12,6 +12,11 @@ import { AuthService } from '../../../servicios/auth/auth.service';
 })
 export class DetalladoComponent implements OnInit {
   tickets: any[];
+  fecha = false;
+  fechas = {
+    fechaInicio: "",
+    fechaFin: ""
+  };
   roles: any;
   estados: any;
   usuarios: any;
@@ -41,7 +46,6 @@ export class DetalladoComponent implements OnInit {
       'idticket': '',
       'idestado': '',
       'idusuario_asignado': '',
-      'fecha_creacion': '',
       'secretaria': '',
       'subdireccion': '',
       'solicitante': '',
@@ -83,8 +87,13 @@ export class DetalladoComponent implements OnInit {
 
   loadData() {
     this.load = false;
+    let fechas = this.fechas;
+    if (!this.fecha) {
+      fechas = null;
+    }
+
     this._ticketsService
-      .getReporteDetalladoPaginado(this.pageG, this.rpp, this.filtros)
+      .getReporteDetalladoPaginado(this.pageG, this.rpp, this.filtros, fechas)
       .subscribe(
         data => {
           this.totalItems = data.total_paginas * 10;
@@ -98,7 +107,16 @@ export class DetalladoComponent implements OnInit {
       );
   }
 
+  fechas_evaluacion() {
 
+
+    if (this.fechas.fechaInicio == "" || this.fechas.fechaFin == "") {
+      return true;
+    } else {
+      return false;
+    }
+
+  }
 
   cargar() {
     this.load = true;
@@ -145,5 +163,19 @@ export class DetalladoComponent implements OnInit {
       );
 
 
+  }
+
+  excel() {
+    let fechas = this.fechas;
+    if (!this.fecha) {
+      fechas = null;
+    }
+    let data = {
+      fechas: fechas,
+      filtros: this.filtros
+    };
+    this._ticketsService
+      .getReporteDetalladoExcel(data)
+      .subscribe();
   }
 }
