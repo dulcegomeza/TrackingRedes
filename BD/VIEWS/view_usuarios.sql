@@ -1,4 +1,8 @@
-CREATE OR REPLACE VIEW view_usuarios AS
-SELECT u.idusuario, u.nombre, u.activo, u.correo, u.password, r.rol, u.idrol
-FROM usuarios AS u
-LEFT JOIN roles AS r ON r.idrol = u.idrol
+--
+-- View:         view_usuarios
+-- Timestamp:    2019-07-25 16:34:34
+-- Stored MD5:   6787e5c8b19492e31fa9ca61826bd266
+-- Computed MD5: 6787e5c8b19492e31fa9ca61826bd266
+--
+
+CREATE  VIEW view_usuarios AS select u.idusuario AS idusuario,u.nombre AS nombre,u.activo AS activo,u.correo AS correo,u.password AS password,r.rol AS rol,u.idrol AS idrol from usuarios u left join roles r on r.idrol = u.idrol;

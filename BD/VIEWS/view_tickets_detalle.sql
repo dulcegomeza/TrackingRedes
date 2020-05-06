@@ -1,11 +1,11 @@
-CREATE OR REPLACE VIEW view_tickets_detalle as select distinct t.telefono, t.extension, t.correo, t.medio, t.mac, t.ip, t.equipo, 
-t.idticket, t.fecha_creacion,t.nombre as solicitante, t.descripcion,t.idsubdireccion, t.idusuario, s.subdireccion,s.iddireccion,d.idsecretaria,sec.secretaria,u.nombre AS capturo,t.idestado,e.estado, e.color, d.direccion,
-(select distinct ta.idusuario_asignado from tickets_asignaciones ta where (ta.idasignacion = (select distinct max(tickets_asignaciones.idasignacion) AS m from tickets_asignaciones where (tickets_asignaciones.idticket = t.idticket) group by tickets_asignaciones.idticket limit 1))) AS idusuario_asignado,
-(select nombre from usuarios WHERE usuarios.idusuario=(select distinct ta.idusuario_asignado from tickets_asignaciones ta where (ta.idasignacion = (select distinct max(tickets_asignaciones.idasignacion) AS m from tickets_asignaciones where (tickets_asignaciones.idticket = t.idticket) group by tickets_asignaciones.idticket limit 1)))) as usuario_asignado
-from tickets as t
-inner join tickets_asignaciones as ta on ta.idticket= t.idticket
-inner join subdirecciones as s on s.idsubdireccion=t.idsubdireccion
-inner join direcciones as d on d.iddireccion=s.iddireccion
-INNER join secretarias as sec on sec.idsecretaria =d.idsecretaria
-inner join usuarios as u on u.idusuario=t.idusuario
-inner join  estados as e on e.idestado=t.idestado
+--
+-- View:         view_tickets_detalle
+-- Timestamp:    2019-07-25 17:36:58
+-- Stored MD5:   86087328c42652778c57da71c0d3c8d4
+-- Computed MD5: 86087328c42652778c57da71c0d3c8d4
+--
+
+CREATE VIEW view_tickets_detalle AS select distinct t.telefono AS telefono,t.extension AS extension,t.correo AS correo,t.medio AS medio,t.mac AS mac,t.ip AS ip,t.equipo AS equipo,t.idticket AS idticket,t.fecha_creacion AS fecha_creacion,t.nombre AS solicitante,t.descripcion AS descripcion,t.idsubdireccion AS idsubdireccion,t.idusuario AS idusuario,s.subdireccion AS subdireccion,s.iddireccion AS iddireccion,d.idsecretaria AS idsecretaria,sec.secretaria AS secretaria,u.nombre AS capturo,t.idestado AS idestado,e.estado AS estado,e.color AS color,d.direccion AS direccion,
+(select distinct ta.idusuario_asignado from tickets_asignaciones ta where ta.idasignacion = (select distinct max(tickets_asignaciones.idasignacion) AS m from tickets_asignaciones where tickets_asignaciones.idticket = t.idticket group by tickets_asignaciones.idticket limit 1)) AS idusuario_asignado,
+(select usuarios.nombre from usuarios where usuarios.idusuario = (select distinct ta.idusuario_asignado from tickets_asignaciones ta where ta.idasignacion = (select distinct max(tickets_asignaciones.idasignacion) AS m from tickets_asignaciones where tickets_asignaciones.idticket = t.idticket group by tickets_asignaciones.idticket limit 1))) AS usuario_asignado 
+from tickets t join tickets_asignaciones ta on ta.idticket = t.idticket join subdirecciones s on s.idsubdireccion = t.idsubdireccion join direcciones d on d.iddireccion = s.iddireccion join secretarias sec on  sec.idsecretaria = d.idsecretaria join usuarios u on u.idusuario = t.idusuario join estados e on e.idestado = t.idestado;
